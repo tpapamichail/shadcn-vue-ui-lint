@@ -17,6 +17,8 @@ import {
 import { componentsFor } from "../project/components"
 import { NODE_MODULES } from "../project/fs"
 import { definingExportOf, type ExportBinding } from "../project/modules"
+import { isSfc } from "../project/sfc"
+import { warnOnce } from "../project/warn"
 import { wrapperTargetOf, type WrapperTarget } from "../project/wrappers"
 import { fileOf } from "../rules/messages"
 import { withSettings } from "../rules/settings"
@@ -1230,6 +1232,18 @@ function spreadSites(
   return list
 }
 
+// A .vue file that arrives without its framework's parser has only its
+// script blocks in the AST (Oxlint does this). Passing quietly would
+// read as "checked", so it says so once.
+export function warnUnreadTemplates(context: any) {
+  if (isSfc(fileOf(context))) {
+    warnOnce(
+      "templates:unread",
+      "Templates in .vue files are read under ESLint with vue-eslint-parser. This run has no template parser, so only their script blocks are linted. See https://github.com/shadcn-ui/lint/blob/main/docs/vue.md."
+    )
+  }
+}
+
 // Calls `onSite` for every class site in the file.
 export function classSiteVisitors(
   context: any,
@@ -1237,7 +1251,10 @@ export function classSiteVisitors(
   onSite: (site: ClassSite) => void
 ) {
   const services = context.sourceCode?.parserServices
-  if (!services?.defineTemplateBodyVisitor) return NO_VISITORS
+  if (!services?.defineTemplateBodyVisitor) {
+    warnUnreadTemplates(context)
+    return NO_VISITORS
+  }
   const shared = sharedFor(context, options)
   if (!shared.hasSites && !options.scanAllStrings) return NO_VISITORS
   const { helpers, collectOptions, consumedCalls, sites } = shared

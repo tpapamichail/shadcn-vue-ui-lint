@@ -209,4 +209,72 @@ describe("variants from props", () => {
     expect(variantNamesFor(file, "Text")).toEqual(["default", "h1"])
     expect(sizeNamesFor(file, "Text")).toEqual(["sm", "lg"])
   })
+
+  // A `buttonVariants` may live in the barrel beside Button.vue.
+  function componentWithBarrel(name: string, barrel: string) {
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), "shadcn-lint-variants-"))
+    const file = path.join(dir, name)
+    fs.writeFileSync(
+      file,
+      sfc(`const props = defineProps<{ class?: string }>()`, `<div />`)
+    )
+    fs.writeFileSync(path.join(dir, "index.ts"), barrel)
+    return file
+  }
+
+  const buttonBarrel = [
+    `export { default as Button } from "./Button.vue"`,
+    `const buttonVariants = cva("", {`,
+    `  variants: {`,
+    `    variant: { default: "", outline: "" },`,
+    `    size: { default: "", sm: "" },`,
+    `  },`,
+    `})`,
+    ``,
+  ].join("\n")
+
+  test("a factory in the barrel beside the component names its variants", () => {
+    const button = componentWithBarrel("Button.vue", buttonBarrel)
+    expect(variantNamesFor(button, "Button")).toEqual([
+      "default",
+      "outline",
+    ])
+    expect(sizeNamesFor(button, "Button")).toEqual(["default", "sm"])
+  })
+
+  test("a barrel's factory belongs only to the component it is named after", () => {
+    const card = componentWithBarrel(
+      "Card.vue",
+      `export { default as Card } from "./Card.vue"\nconst buttonVariants = cva("", { variants: { tone: { neutral: "", loud: "" } } })\n`
+    )
+    // The factory is buttonVariants, not cardVariants: a barrel speaks
+    // for many components, so its first factory is no one's by default.
+    expect(variantNamesFor(card, "Card")).toBeNull()
+  })
+
+  test("a barrel speaks only for the components it re-exports", () => {
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), "shadcn-lint-variants-"))
+    const chip = path.join(dir, "Chip.vue")
+    fs.writeFileSync(
+      chip,
+      sfc(`const props = defineProps<{ class?: string }>()`, `<div />`)
+    )
+    const other = path.join(dir, "Other.vue")
+    fs.writeFileSync(
+      other,
+      sfc(`const props = defineProps<{ class?: string }>()`, `<div />`)
+    )
+    fs.writeFileSync(
+      path.join(dir, "index.ts"),
+      [
+        `export { default as Other } from "./Other.vue"`,
+        `const chipVariants = cva("", { variants: { tone: { neutral: "", loud: "" } } })`,
+        ``,
+      ].join("\n")
+    )
+    // chipVariants is named after Chip, but the barrel re-exports only
+    // the other component: neither of them gets the factory.
+    expect(variantNamesFor(chip, "Chip")).toBeNull()
+    expect(variantNamesFor(other, "Other")).toBeNull()
+  })
 })

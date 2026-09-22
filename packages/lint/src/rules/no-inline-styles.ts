@@ -13,6 +13,7 @@ import {
   resolveObject,
   resolveProperty,
   templateContextFor,
+  warnUnreadTemplates,
 } from "../sites/collect"
 import {
   allowListOf,
@@ -421,7 +422,7 @@ export const noInlineStyles = {
       }
     }
 
-    return context.sourceCode.parserServices.defineTemplateBodyVisitor({
+    const templateVisitor = {
       VAttribute(node: any) {
         const key = node.key
         if (!node.directive) {
@@ -490,6 +491,14 @@ export const noInlineStyles = {
           check(value, value, new Set(), component)
         }
       },
-    })
+    }
+    const services = context.sourceCode?.parserServices
+    if (typeof services?.defineTemplateBodyVisitor === "function") {
+      return services.defineTemplateBodyVisitor(templateVisitor)
+    }
+    // Without the parser the visitors serve the script half alone; a
+    // VAttribute handler never fires there.
+    warnUnreadTemplates(context)
+    return templateVisitor
   },
 }

@@ -8,11 +8,16 @@ import vueParser from "vue-eslint-parser"
 
 import { plugin } from "../src/index"
 import { list } from "../src/project/ast"
+import {
+  componentFromImport,
+  importNameOf,
+} from "../src/project/component-imports"
+import { componentsFor } from "../src/project/components"
 import { resetFsMemo } from "../src/project/fs"
 import { parseSfc } from "../src/project/sfc"
 import { clearWrapperCache, wrapperTargetOf } from "../src/project/wrappers"
 import { createComponentTracker } from "../src/sites/collect"
-import { PAGE, PROJECT, sfc, template } from "./helpers"
+import { OUTSIDE, PAGE, PROJECT, sfc, template } from "./helpers"
 
 // The file under test. Its wrapper comes from the SFC supplied to the
 // analysis, so what the file holds does not matter: it is where the
@@ -293,5 +298,41 @@ describe("imported component identity", () => {
       component: "Button",
       file: button,
     })
+  })
+})
+
+// A project without a ui directory: the import is recognized by a
+// componentImports pattern alone, so the binding's file names the
+// component.
+describe("pattern-matched imports", () => {
+  const patterns = [/^@\/ds/]
+  const imported = { source: "@/ds/dialog", original: "*", namespace: true }
+  const name = importNameOf(imported, "Dialog", "Content")
+  const index = componentsFor(OUTSIDE)
+
+  test("a single-file component is named by its file", () => {
+    expect(
+      componentFromImport(
+        index,
+        { file: "/ds/dialog/dialog-content.vue", name: "DialogContent" },
+        name,
+        patterns
+      )
+    ).toEqual({
+      component: "DialogContent",
+      file: "/ds/dialog/dialog-content.vue",
+    })
+  })
+
+  test("a script file keeps the export name the import gives it", () => {
+    // A module's own export name is all a script file has, and it stays.
+    expect(
+      componentFromImport(
+        index,
+        { file: "/ds/dialog.ts", name: "DialogContent" },
+        name,
+        patterns
+      )?.component
+    ).toBe("Content")
   })
 })

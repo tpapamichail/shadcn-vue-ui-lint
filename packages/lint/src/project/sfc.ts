@@ -11,6 +11,7 @@ import * as path from "node:path"
 
 import { child, type Node } from "./ast"
 import { mtimeOf } from "./fs"
+import { parseClassSelectors } from "./theme"
 import { warnOnce } from "./warn"
 
 const require = createRequire(import.meta.url)
@@ -110,4 +111,21 @@ export function sfcComponentName(file: string) {
     .split(/[-_]/)
     .map((part) => (part ? part.charAt(0).toUpperCase() + part.slice(1) : part))
     .join("")
+}
+
+// A single-file component: its scripts are the module, its file the
+// component.
+export function isSfc(file: string) {
+  return /\.vue$/i.test(file)
+}
+
+const STYLE_RE = /<style\b[^>]*>([\s\S]*?)<\/style\s*>/gi
+
+// The classes an SFC's own <style> blocks select.
+export function styleClassesOf(source: string) {
+  const out = new Set<string>()
+  for (const match of source.matchAll(STYLE_RE)) {
+    for (const name of parseClassSelectors(match[1])) out.add(name)
+  }
+  return out
 }

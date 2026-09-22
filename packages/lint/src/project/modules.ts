@@ -42,9 +42,31 @@ const STAR_RE = /export\s*\*\s*(?:as\s+([\w$]+)\s+)?from\s*["']([^"']+)["']/g
 const IMPORT_RE =
   /import\s+(?!type\s)(?:([\w$]+)\s*,?\s*)?(?:\*\s*as\s+([\w$]+)|\{([^}]*)\})?\s*from\s*["']([^"']+)["']/g
 
+// A list may carry comments: a barrel may separate its short names
+// from its long ones with a bare `//`.
+const COMMENT_RE = /\/\*[\s\S]*?\*\/|\/\/[^\n\r]*/g
+
+const SCRIPT_RE = /<script\b[^>]*>([\s\S]*?)<\/script\s*>/gi
+
+// The script blocks of a .vue file with everything else blanked, so
+// every range still points at the file's own offsets.
+function scriptOf(source: string) {
+  let out = ""
+  let last = 0
+  for (const match of source.matchAll(SCRIPT_RE)) {
+    const start = match.index + match[0].indexOf(">") + 1
+    const end = start + match[1].length
+    out +=
+      source.slice(last, start).replace(/[^\n\r]/g, " ") +
+      source.slice(start, end)
+    last = end
+  }
+  return out + source.slice(last).replace(/[^\n\r]/g, " ")
+}
+
 function parseNamed(list: string) {
   const out: { exported: string; local: string }[] = []
-  for (const raw of list.split(",")) {
+  for (const raw of list.replace(COMMENT_RE, "").split(",")) {
     const item = raw.trim()
     if (!item || item.startsWith("type ")) continue
     const [local, exported] = item.split(/\s+as\s+/).map((s) => s.trim())
@@ -69,6 +91,9 @@ function parseModule(file: string): ParsedModule {
   } catch {
     return module
   }
+  // A .vue file's module is its script blocks: everything else is
+  // blanked so the scans below see no template text.
+  if (/\.vue$/i.test(file)) source = scriptOf(source)
   for (const match of source.matchAll(IMPORT_RE)) {
     const [, defaultLocal, namespaceLocal, list, spec] = match
     if (defaultLocal)

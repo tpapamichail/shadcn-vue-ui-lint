@@ -14,7 +14,18 @@ import {
   realpath,
 } from "./fs"
 
-const EXTENSIONS = [".vue", ".ts", ".tsx", ".js", ".jsx", ".mjs", ".cjs", ".css"]
+// Single-file components last: an extensionless import of one is rare
+// (Vite wants the extension) and never shadows a script.
+const EXTENSIONS = [
+  ".ts",
+  ".tsx",
+  ".js",
+  ".jsx",
+  ".mjs",
+  ".cjs",
+  ".css",
+  ".vue",
+]
 
 // nodenext and bundler resolution import "./button.js" for button.tsx.
 const SOURCE_FOR_JS: Record<string, string[]> = {

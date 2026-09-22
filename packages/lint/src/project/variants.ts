@@ -3,9 +3,12 @@
 // without a factory. Messages list these so reuse is the first option.
 
 import * as fs from "node:fs"
+import * as path from "node:path"
 
 import { child, list, text, walk, type Node } from "./ast"
+import { barrelOf } from "./components"
 import { mtimeOf } from "./fs"
+import { exportsOf } from "./modules"
 import { parseSource } from "./parser"
 import { sfcComponentName, sfcOf } from "./sfc"
 
@@ -356,10 +359,19 @@ export function variantDefinitionsOf(file: string) {
 // (buttonVariants for Button), else the component's own props (Text),
 // else the file's first cva. Another component's props never apply.
 function definitionFor(file: string, component: string) {
-  const definitions = variantDefinitionsOf(file)
-  if (!definitions.length) return null
   const expected =
     component.charAt(0).toLowerCase() + component.slice(1) + "Variants"
+  const definitions = variantDefinitionsOf(file)
+  if (!definitions.length) {
+    // A `buttonVariants` may live in the barrel beside Button.vue.
+    // Only the factory named after the component: a barrel speaks for
+    // many components, so its first factory is no one's by default.
+    const barrel = /\.vue$/i.test(file) ? barrelOf(path.dirname(file)) : null
+    if (!barrel) return null
+    const exported = [...exportsOf(barrel).values()]
+    if (!exported.some((binding) => binding.file === file)) return null
+    return variantDefinitionsOf(barrel).find((d) => d.name === expected) ?? null
+  }
   return (
     definitions.find((d) => d.name === expected) ??
     definitions.find((d) => d.name === component && d.source === "props") ??

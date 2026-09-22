@@ -47,7 +47,13 @@ export function componentFromImport(
     }
   }
   if (patterns.some((pattern) => pattern.test(importedName.source))) {
-    return { component: importedName.name, file: binding?.file ?? null }
+    // A single-file component is named by its file: a barrel's `Content`
+    // says nothing, `dialog-content.vue` does.
+    const component =
+      binding && /\.vue$/i.test(binding.file)
+        ? `${binding.name}${importedName.suffix}`
+        : importedName.name
+    return { component, file: binding?.file ?? null }
   }
   return null
 }

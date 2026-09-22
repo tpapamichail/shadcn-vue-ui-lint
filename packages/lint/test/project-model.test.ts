@@ -4,12 +4,13 @@ import * as path from "node:path"
 import { afterEach, beforeEach, describe, expect, test } from "vitest"
 
 import { classifierFor, groupOf } from "../src/grammar/classifier"
-import { componentsFor } from "../src/project/components"
+import { barrelOf, componentsFor } from "../src/project/components"
 import {
   findProject,
   projectFor,
   uiDirectory,
 } from "../src/project/components-json"
+import { resetFsMemo } from "../src/project/fs"
 import { definingFileOf, exportsOf } from "../src/project/modules"
 import {
   readJsonc,
@@ -86,6 +87,31 @@ describe("resolve", () => {
     ).toBe(DS_BUTTON_INDEX)
     expect(resolveFile("@/nothing", NO_JSON, NO_JSON)).toBeNull()
   })
+
+  test("an extensionless import resolves a script before a single-file component", () => {
+    const write = (dir: string, name: string, source: string) => {
+      fs.writeFileSync(path.join(dir, name), source)
+    }
+    const both = fs.realpathSync.native(
+      fs.mkdtempSync(path.join(os.tmpdir(), "shadcn-lint-ext-"))
+    )
+    write(both, "dialog.ts", "export const Dialog = 1")
+    write(both, "dialog.vue", "<template>\n  <dialog />\n</template>\n")
+    // A .vue file never shadows a script of the same stem...
+    expect(resolveFile("./dialog", both, both)).toBe(
+      path.join(both, "dialog.ts")
+    )
+    // ...and resolves when it is the only file there.
+    const only = fs.realpathSync.native(
+      fs.mkdtempSync(path.join(os.tmpdir(), "shadcn-lint-ext-"))
+    )
+    write(only, "dialog.vue", "<template>\n  <dialog />\n</template>\n")
+    expect(resolveFile("./dialog", only, only)).toBe(
+      path.join(only, "dialog.vue")
+    )
+    for (const dir of [both, only])
+      fs.rmSync(dir, { recursive: true, force: true })
+  })
 })
 
 describe("modules", () => {
@@ -101,6 +127,119 @@ describe("modules", () => {
     // An unknown name falls back to the module itself.
     expect(definingFileOf("@/ds", "Nope", NO_JSON_PAGE)).toBe(DS_INDEX)
     expect(definingFileOf("@/missing", "Button", NO_JSON_PAGE)).toBeNull()
+  })
+
+  test("a .vue file's exports come from its script, never its template", () => {
+    const dir = fs.realpathSync.native(
+      fs.mkdtempSync(path.join(os.tmpdir(), "shadcn-lint-script-"))
+    )
+    fs.writeFileSync(
+      path.join(dir, "phantom.ts"),
+      "export const Phantom = 1"
+    )
+    const ghost = path.join(dir, "Ghost.vue")
+    fs.writeFileSync(
+      ghost,
+      [
+        `<script setup lang="ts">`,
+        `export const Real = 1`,
+        `</script>`,
+        ``,
+        `<template>`,
+        `  <!-- export { Phantom } from "./phantom" -->`,
+        `  <div />`,
+        `</template>`,
+        ``,
+      ].join("\n")
+    )
+    const exported = exportsOf(ghost)
+    expect([...exported.keys()].sort()).toEqual(["Real", "default"])
+    expect(exported.get("default")).toEqual({ file: ghost, name: "Ghost" })
+    fs.rmSync(dir, { recursive: true, force: true })
+  })
+
+  test("a barrel's export list may carry comments", () => {
+    const dir = fs.realpathSync.native(
+      fs.mkdtempSync(path.join(os.tmpdir(), "shadcn-lint-comments-"))
+    )
+    const card = path.join(dir, "Card.vue")
+    fs.writeFileSync(card, "<template>\n  <div />\n</template>\n")
+    const barrel = path.join(dir, "index.ts")
+    fs.writeFileSync(
+      barrel,
+      [
+        `export {`,
+        `  // The short names a template writes.`,
+        `  default as Card,`,
+        `  default as CardTitle, // the title, in full`,
+        `  /* the footer */ default as CardFooter,`,
+        `} from "./Card.vue"`,
+        ``,
+      ].join("\n")
+    )
+    const exported = exportsOf(barrel)
+    expect([...exported.keys()].sort()).toEqual([
+      "Card",
+      "CardFooter",
+      "CardTitle",
+    ])
+    expect(exported.get("CardTitle")).toEqual({ file: card, name: "Card" })
+    fs.rmSync(dir, { recursive: true, force: true })
+  })
+})
+
+describe("barrels", () => {
+  const dirs: string[] = []
+  function temporary() {
+    const dir = fs.realpathSync.native(
+      fs.mkdtempSync(path.join(os.tmpdir(), "shadcn-lint-barrel-"))
+    )
+    dirs.push(dir)
+    return dir
+  }
+
+  afterEach(() => {
+    for (const dir of dirs.splice(0))
+      fs.rmSync(dir, { recursive: true, force: true })
+  })
+
+  test("index.js is a barrel only beside single-file components", () => {
+    const dir = temporary()
+    // Plain JavaScript barrels were never read and still are not.
+    fs.writeFileSync(path.join(dir, "index.js"), "export const A = 1")
+    expect(barrelOf(dir)).toBeNull()
+    // A directory of single-file components may keep its barrel in
+    // plain JavaScript.
+    fs.writeFileSync(path.join(dir, "Card.vue"), "<template />\n")
+    resetFsMemo()
+    expect(barrelOf(dir)).toBe(path.join(dir, "index.js"))
+    // The typed barrels keep their priority.
+    fs.writeFileSync(
+      path.join(dir, "index.ts"),
+      'export { default as Card } from "./Card.vue"'
+    )
+    resetFsMemo()
+    expect(barrelOf(dir)).toBe(path.join(dir, "index.ts"))
+  })
+
+  test("an index.js barrel is indexed with the components beside it", () => {
+    const root = temporary()
+    fs.writeFileSync(path.join(root, "package.json"), '{"private":true}')
+    fs.writeFileSync(
+      path.join(root, "components.json"),
+      JSON.stringify({ aliases: { ui: "@/components/ui" } })
+    )
+    const card = path.join(root, "components/ui/card/Card.vue")
+    fs.mkdirSync(path.dirname(card), { recursive: true })
+    fs.writeFileSync(card, "<template>\n  <div />\n</template>\n")
+    fs.writeFileSync(
+      path.join(root, "components/ui/card/index.js"),
+      'export { default as Card } from "./Card.vue"'
+    )
+    const page = path.join(root, "app/page.vue")
+    fs.mkdirSync(path.dirname(page), { recursive: true })
+    fs.writeFileSync(page, "<template />\n")
+    expect(componentsFor(page).files.get("Card")).toBe(card)
   })
 })
 
