@@ -2,9 +2,9 @@
 
 **Write design system rules that agents can verify.**
 
-<img src="./docs/assets/cover.png" width="2000" height="832" alt="A lint diagnostic explains why padding is not allowed on Button and suggests using an existing size." />
-
 `@tpapamichail/shadcn-vue-lint` is an [agent-first linter](#built-for-agents) for Tailwind design systems in Vue.
+
+It is a Vue port of [`@shadcn/lint`](https://github.com/shadcn-ui/lint), the same linter for React: the same rules, options, and agent-facing messages, retargeted from JSX to Vue single-file components.
 
 You define what’s allowed. When an agent breaks a rule, the error explains what’s wrong and suggests a fix based on your components, variants, and theme.
 
@@ -176,7 +176,7 @@ get your design system’s instructions with the error.
 
 We tested these rules with coding agents across more than 150 task runs. Almost every task reached zero violations in one correction round.
 
-These numbers are historical: they were measured on the pre-port suite, before the linter targeted Vue SFCs. The rules and the feedback they produce are unchanged.
+These numbers are historical: they were measured on the React original, `@shadcn/lint`, before this port targeted Vue SFCs. The rules and the feedback they produce are unchanged.
 
 Here are the errors before and after lint feedback in one run per model:
 

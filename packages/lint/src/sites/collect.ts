@@ -542,7 +542,15 @@ function receiversOfContext(context: any) {
       if (callee?.type !== "Identifier") return
       const isProps = callee.name === "defineProps"
       const isAttrs = callee.name === "useAttrs"
-      const declarator = parent?.type === "VariableDeclarator" ? parent : null
+      // `withDefaults(defineProps(), { ... })`: the receiver is the
+      // declarator around the wrapping call.
+      let wrapper = parent
+      if (
+        wrapper?.type === "CallExpression" &&
+        wrapper.callee?.name === "withDefaults"
+      )
+        wrapper = wrapper.parent
+      const declarator = wrapper?.type === "VariableDeclarator" ? wrapper : null
       const id = declarator?.id
       if (!id || (!isProps && !isAttrs)) return
       if (id.type === "Identifier") {

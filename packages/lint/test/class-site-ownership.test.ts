@@ -84,7 +84,7 @@ function expectIndependentRules(
   return independent
 }
 
-const lint = (script: string, markup: string, rules: Record<string, unknown>) =>
+const lint = (script: string, markup: string, rules: Linter.RulesRecord) =>
   new Linter({ cwd: PROJECT }).verify(
     sfc(script, markup),
     [
@@ -402,7 +402,7 @@ describe("a standalone helper call reaches every rule", () => {
     ],
     [`${cn}\nconst styles = cn("bg-red-500 rounded-[13px]")`, `<div :class="styles" />`],
   ]
-  const orders = [
+  const orders: Linter.RulesRecord[] = [
     { "shadcn-vue/no-raw-colors": "error", "shadcn-vue/no-arbitrary-values": "error" },
     { "shadcn-vue/no-arbitrary-values": "error", "shadcn-vue/no-raw-colors": "error" },
   ]
@@ -420,7 +420,7 @@ describe("a standalone helper call reaches every rule", () => {
     }
   })
   test("and through the documented rule set", () => {
-    const rules = {
+    const rules: Linter.RulesRecord = {
       "shadcn-vue/no-restyle": "error",
       "shadcn-vue/no-raw-colors": "error",
       "shadcn-vue/no-arbitrary-values": "error",

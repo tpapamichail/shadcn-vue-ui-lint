@@ -1,6 +1,6 @@
 # Evals
 
-The evals measure how agents style UI before and after `@shadcn/lint`
+The evals measure how agents style UI before and after `@tpapamichail/shadcn-vue-lint`
 feedback: how far they drift from the design system, where the fix lands,
 and whether the requested look survives. The harness lives in
 [packages/evals](../packages/evals). Every number below comes from a
