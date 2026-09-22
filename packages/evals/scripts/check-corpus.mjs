@@ -3,6 +3,12 @@
 // never exceed the checked-in baseline. Lower them in the baseline as
 // the registry migrates toward deliberate-zero; never raise them.
 //
+// The baseline reflects the current Vue-only plugin's site collection
+// over the React-sourced registry corpus: JSX class sites are not
+// collected by design, so the honest per-rule measurement is zero and
+// the gate is strict — any finding over this corpus fails. Retargeting
+// the corpus to a Vue registry is future work.
+//
 // Usage:
 //   node scripts/check-corpus.mjs            # verify against baseline
 //   node scripts/check-corpus.mjs --update   # rewrite baseline
@@ -53,7 +59,7 @@ const eslint = new ESLint({
         parser,
         parserOptions: { ecmaFeatures: { jsx: true } },
       },
-      plugins: { shadcn: plugin },
+      plugins: { "shadcn-vue": plugin },
       rules: rulesAt("warn", Object.keys(plugin.rules)),
     },
     // The documented policy inside ui, from lib/policy.mjs.

@@ -16,7 +16,7 @@ const ui = { rules: UI_RULES }
 const base = {
   files: ["**/*.tsx"],
   languageOptions: { parser, parserOptions: { ecmaFeatures: { jsx: true } } },
-  plugins: { shadcn: plugin },
+  plugins: { "shadcn-vue": plugin },
 }
 async function run(label, rules, uiRules) {
   const eslint = new ESLint({

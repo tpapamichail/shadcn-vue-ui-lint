@@ -55,7 +55,9 @@ const tasks = JSON.parse(fs.readFileSync(TASKS_PATH, "utf-8")).slice(
 // Tokens declared in the theme and variants available on the ui
 // components, as the linter sees them from a file in the project.
 function vocabulary(workdir) {
-  const probe = path.join(workdir, "app/probe.tsx")
+  // A path inside the project; the readers walk up from it to
+  // components.json and the theme, so the file itself need not exist.
+  const probe = path.join(workdir, "app/probe.vue")
   const tokens = lint.project.colorTokensFor(probe)?.size ?? 0
   const index = lint.project.componentsFor(probe)
   let variants = 0

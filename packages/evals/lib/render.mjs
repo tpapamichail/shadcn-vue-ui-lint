@@ -1,12 +1,11 @@
-// Renders a generated component to a screenshot: esbuild bundles the
-// TSX (with the fixture's ui components and React), the Tailwind v4
+// Renders a generated component to a screenshot: vite bundles the
+// SFC (with the fixture's ui components and Vue), the Tailwind v4
 // CLI compiles the theme CSS against the workdir, and Playwright
 // screenshots the result.
 
 import { execFileSync } from "node:child_process"
 import * as fs from "node:fs"
 import * as path from "node:path"
-import * as esbuild from "esbuild"
 
 import { readComponent } from "./component.mjs"
 
@@ -18,18 +17,23 @@ export function entrySource(exportName, componentPath, withChildren) {
     exportName === "default"
       ? "PreviewComponent"
       : `{ ${exportName} as PreviewComponent }`
-  const element = withChildren
-    ? `<PreviewComponent>Preview content</PreviewComponent>`
-    : `<PreviewComponent />`
-  return `import * as React from "react"
-import { createRoot } from "react-dom/client"
-import ${binding} from "${componentPath.replace(/\.tsx$/, "")}"
+  const slot = withChildren
+    ? `, null, { default: () => "Preview content" }`
+    : ``
+  return `import { createApp, h } from "vue"
+import ${binding} from "${componentPath}"
 
-createRoot(document.getElementById("root")).render(
-  <div style={{ padding: 40, display: "grid", placeItems: "center", minHeight: "100vh" }}>
-    ${element}
-  </div>
-)
+createApp({
+  render: () =>
+    h(
+      "div",
+      {
+        style:
+          "padding: 40px; display: grid; place-items: center; min-height: 100vh",
+      },
+      [h(PreviewComponent${slot})]
+    ),
+}).mount("#root")
 `
 }
 
@@ -60,25 +64,12 @@ async function renderAttempt({ workdir, taskFile, outPng, withChildren }) {
   }
 
   // Entry that mounts the component on a padded stage.
-  const entryPath = path.join(previewDir, "entry.tsx")
-  const componentPath = path
-    .relative(previewDir, path.join(workdir, taskFile))
-    .replace(/\\/g, "/")
+  const entryPath = path.join(previewDir, "entry.ts")
+  const componentPath = path.relative(previewDir, path.join(workdir, taskFile))
   fs.writeFileSync(
     entryPath,
     entrySource(exportName, componentPath, withChildren)
   )
-
-  await esbuild.build({
-    entryPoints: [entryPath],
-    bundle: true,
-    outfile: path.join(previewDir, "bundle.js"),
-    format: "iife",
-    jsx: "automatic",
-    define: { "process.env.NODE_ENV": '"production"' },
-    alias: { "@": workdir },
-    logLevel: "silent",
-  })
 
   // Workdirs from runs that predate the fixture theme get it backfilled.
   const globalsPath = path.join(workdir, "app/globals.css")
@@ -107,9 +98,48 @@ async function renderAttempt({ workdir, taskFile, outPng, withChildren }) {
     `<!doctype html>
 <html>
 <head><meta charset="utf-8"><link rel="stylesheet" href="./styles.css"></head>
-<body><div id="root"></div><script src="./bundle.js"></script></body>
+<body><div id="root"></div><script type="module" src="./entry.ts"></script></body>
 </html>
 `
+  )
+
+  // Vite bundles the entry, the SFC graph and the stylesheet into a
+  // standalone dist the browser can load from file://. A single entry
+  // and no code-splitting means the bundle can be a classic iife
+  // script: module scripts do not execute from file:// origins.
+  const [{ build }, vuePlugin] = await Promise.all([
+    import("vite"),
+    import("@vitejs/plugin-vue").then((m) => m.default),
+  ])
+  await build({
+    root: previewDir,
+    base: "./",
+    configFile: false,
+    logLevel: "silent",
+    plugins: [vuePlugin()],
+    resolve: { alias: { "@": workdir } },
+    build: {
+      outDir: path.join(previewDir, "dist"),
+      emptyOutDir: true,
+      modulePreload: false,
+      rollupOptions: { output: { format: "iife" } },
+    },
+  })
+
+  // Vite stamps the entry tag type="module" whatever the bundle
+  // format, and module scripts do not execute from file:// origins.
+  // The single-entry iife above is a classic script: load it as one.
+  // Vite also moves the tag into <head>, where it would run before
+  // the mount target exists (production Vue mount silently returns
+  // on a null container), so it is deferred.
+  const builtHtml = path.join(previewDir, "dist", "index.html")
+  fs.writeFileSync(
+    builtHtml,
+    fs
+      .readFileSync(builtHtml, "utf-8")
+      .replace(/ type="module"/g, "")
+      .replace(/ crossorigin/g, "")
+      .replace(/<script /g, "<script defer ")
   )
 
   const { chromium } = await import("playwright")
@@ -119,7 +149,9 @@ async function renderAttempt({ workdir, taskFile, outPng, withChildren }) {
       viewport: { width: 800, height: 600 },
       deviceScaleFactor: 2,
     })
-    await page.goto(`file://${path.join(previewDir, "index.html")}`)
+    await page.goto(
+      `file://${path.join(previewDir, "dist", "index.html")}`
+    )
     await page.waitForTimeout(300)
     // Crop to the rendered component (plus margin) so small subjects
     // like a lone badge stay legible to the judge.

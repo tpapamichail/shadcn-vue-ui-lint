@@ -10,7 +10,8 @@
 import { execFileSync } from "node:child_process"
 import * as path from "node:path"
 import { pathToFileURL } from "node:url"
-import parser from "@typescript-eslint/parser"
+import tsParser from "@typescript-eslint/parser"
+import vueParser from "vue-eslint-parser"
 import { ESLint } from "eslint"
 
 import { RULES, UI_RULES } from "../lib/policy.mjs"
@@ -45,20 +46,27 @@ for (const dir of dirs) {
     overrideConfigFile: true,
     overrideConfig: [
       {
-        files: ["app/**/*.tsx", "components/**/*.tsx"],
+        files: ["app/**/*.vue", "components/**/*.vue"],
         languageOptions: {
-          parser,
-          parserOptions: { ecmaFeatures: { jsx: true } },
+          // The exact SFC setup the linter is tested with:
+          // vue-eslint-parser for the template, @typescript-eslint/parser
+          // for the script blocks.
+          parser: vueParser,
+          parserOptions: {
+            parser: tsParser,
+            sourceType: "module",
+            ecmaFeatures: { jsx: false },
+          },
         },
-        plugins: { shadcn: plugin },
+        plugins: { "shadcn-vue": plugin },
         rules,
       },
-      { files: ["components/ui/**/*.tsx"], rules: uiPolicy.rules },
+      { files: ["components/ui/**/*.vue"], rules: uiPolicy.rules },
     ],
   })
   const results = await eslint.lintFiles([
-    "app/**/*.tsx",
-    "components/**/*.tsx",
+    "app/**/*.vue",
+    "components/**/*.vue",
   ])
   const byRule = {}
   const findings = []
@@ -81,7 +89,9 @@ for (const dir of dirs) {
   let typechecks = true
   let tscError = ""
   try {
-    execFileSync("npx", ["tsc", "--noEmit"], { cwd: abs, stdio: "pipe" })
+    // vue-tsc, not tsc: the generated code is in .vue script blocks,
+    // which plain tsc never reads.
+    execFileSync("npx", ["vue-tsc", "--noEmit"], { cwd: abs, stdio: "pipe" })
   } catch (err) {
     typechecks = false
     tscError = String(err.stdout ?? "").slice(0, 200)

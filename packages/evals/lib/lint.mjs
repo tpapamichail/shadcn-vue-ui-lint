@@ -4,7 +4,8 @@
 import * as fs from "node:fs"
 import * as path from "node:path"
 import { pathToFileURL } from "node:url"
-import parser from "@typescript-eslint/parser"
+import tsParser from "@typescript-eslint/parser"
+import vueParser from "vue-eslint-parser"
 import { ESLint } from "eslint"
 
 import { readComponent } from "./component.mjs"
@@ -22,12 +23,25 @@ const { plugin } = await import(
 // The documented configuration, from lib/policy.mjs.
 const uiPolicy = { rules: UI_RULES }
 
+// The exact SFC setup the linter is tested with: vue-eslint-parser for
+// the template, @typescript-eslint/parser for the script blocks.
+function sfcLanguageOptions() {
+  return {
+    parser: vueParser,
+    parserOptions: {
+      parser: tsParser,
+      sourceType: "module",
+      ecmaFeatures: { jsx: false },
+    },
+  }
+}
+
 // Lints the work dir. Findings are the shadcn rules' diagnostics plus
 // harness validity checks so that broken or missing task output never
 // counts as clean. Expected files must export a component and build.
 export async function lintWorkdir(workdir, { expectFiles = [] } = {}) {
   const manifest = manifestFor(workdir)
-  const uiGlob = `${manifest.componentsDir}/**/*.tsx`
+  const uiGlob = `${manifest.componentsDir}/**/*.vue`
   const rules = rulesFor(manifest)
   const eslint = new ESLint({
     cwd: workdir,
@@ -35,11 +49,8 @@ export async function lintWorkdir(workdir, { expectFiles = [] } = {}) {
     overrideConfigFile: true,
     overrideConfig: [
       {
-        files: ["app/**/*.tsx", uiGlob],
-        languageOptions: {
-          parser,
-          parserOptions: { ecmaFeatures: { jsx: true } },
-        },
+        files: ["app/**/*.vue", uiGlob],
+        languageOptions: sfcLanguageOptions(),
         plugins: { "shadcn-vue": plugin },
         rules,
       },
@@ -49,7 +60,7 @@ export async function lintWorkdir(workdir, { expectFiles = [] } = {}) {
     ],
   })
 
-  const results = await eslint.lintFiles(["app/**/*.tsx", uiGlob])
+  const results = await eslint.lintFiles(["app/**/*.vue", uiGlob])
   const findings = []
   for (const file of expectFiles) {
     const full = path.join(workdir, file)

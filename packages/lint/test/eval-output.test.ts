@@ -1,10 +1,9 @@
-// The eval harness (packages/evals) is still React/TSX-bound: its output
-// validation reads app/page.tsx JSX through lib/component.mjs, and its
-// config registers the plugin under "shadcn" while lib/policy.mjs names
-// "shadcn-vue/*" rules, so lintWorkdir throws before it lints. The export
-// validation cases were dropped with it. What stays here is the part that
-// does not depend on that harness half: how the classifier reads variant
-// definitions, through the plugin's own variantDefinitionsOf.
+// The eval harness (packages/evals) classifies Vue workdirs: the work
+// dir holds Vue SFCs plus ui cva modules, and lib/classify.mjs reads
+// variant definitions from any changed ui source through the plugin's
+// own variantDefinitionsOf. These cases pin those identity rules on the
+// files the Vue harness produces: a ui cva module (the variants.ts a
+// barrel re-exports) and a .vue task file.
 
 import * as fs from "node:fs"
 import * as os from "node:os"
@@ -41,12 +40,12 @@ afterEach(() => {
 
 describe("eval variants retain definition identity", () => {
   function classify(before: string, after: string) {
-    const fixtureDir = workdir({ "components/ui/card.tsx": before })
-    const dir = workdir({ "components/ui/card.tsx": after })
+    const fixtureDir = workdir({ "components/ui/card/variants.ts": before })
+    const dir = workdir({ "components/ui/card/variants.ts": after })
     return classifyRedirect({
       workdir: dir,
       fixtureDir,
-      task: { file: "app/page.tsx" },
+      task: { file: "app/page.vue" },
       findings: [],
     })
   }

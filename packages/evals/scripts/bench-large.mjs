@@ -125,7 +125,7 @@ export function Page() {
             parser,
             parserOptions: { ecmaFeatures: { jsx: true } },
           },
-          plugins: { shadcn: plugin },
+          plugins: { "shadcn-vue": plugin },
           rules: enabled ? rulesAt("error", Object.keys(plugin.rules)) : {},
         },
       ],

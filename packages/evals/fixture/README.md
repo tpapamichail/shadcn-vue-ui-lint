@@ -1,8 +1,10 @@
 # Project
 
-A shadcn/ui project (base-nova style on Base UI, Tailwind v4, CSS variables).
+A shadcn-vue project (new-york style, Tailwind v4, CSS variables).
 
-- UI components live in `components/ui` (button, card, badge).
+- UI components live in `components/ui` (button, card, badge) as Vue
+  single-file components, imported through their barrel
+  (`@/components/ui/button`).
 - Use the `cn` helper from `@/lib/utils` to compose classes.
 - Theme tokens: `bg-primary`, `bg-secondary`, `bg-muted`, `bg-accent`,
   `bg-destructive`, `text-foreground`, `text-muted-foreground`, and the

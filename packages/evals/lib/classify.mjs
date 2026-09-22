@@ -31,7 +31,7 @@ function sourceFiles(dir, out = []) {
     const full = path.join(dir, entry.name)
     if (entry.isDirectory()) {
       if (entry.name !== "node_modules") sourceFiles(full, out)
-    } else if (/\.(tsx|ts|jsx|js|css)$/.test(entry.name)) {
+    } else if (/\.(vue|ts|js|mjs|cjs|css)$/.test(entry.name)) {
       out.push(full)
     }
   }
@@ -101,7 +101,7 @@ export function classifyRedirect({ workdir, fixtureDir, task, findings }) {
   if (/<style[\s>]/.test(appFile)) {
     return "style-element"
   }
-  if (/style\s*=\s*\{\{/.test(appFile)) {
+  if (/(\s|^):style\s*=|\sstyle\s*=\s*"/.test(appFile)) {
     return "inline-style"
   }
 

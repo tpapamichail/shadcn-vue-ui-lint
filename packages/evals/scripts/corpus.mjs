@@ -58,7 +58,7 @@ const eslint = new ESLint({
         parser,
         parserOptions: { ecmaFeatures: { jsx: true } },
       },
-      plugins: { shadcn: plugin },
+      plugins: { "shadcn-vue": plugin },
       // Every rule at warn: the preset's five and the opt-in
       // no-unknown-classes, measured alongside.
       rules: rulesAt("warn", Object.keys(plugin.rules)),
