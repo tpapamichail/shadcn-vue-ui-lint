@@ -18,6 +18,7 @@ You define what’s allowed. When an agent breaks a rule, the error explains wha
 - [TypeScript vs @tpapamichail/shadcn-vue-lint](#typescript-vs-tpapamichailshadcn-vue-lint)
 - [Built for agents](#built-for-agents)
 - [Get started](#get-started)
+- [Links in Vue and Nuxt](docs/link.md)
 - [Rules](#rules)
 - [Configuration](#settings)
 
