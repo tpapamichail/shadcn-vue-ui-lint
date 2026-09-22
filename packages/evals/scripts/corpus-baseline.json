@@ -1,8 +1,8 @@
 {
-  "shadcn-vue/no-restyle": 0,
-  "shadcn-vue/no-raw-colors": 0,
-  "shadcn-vue/no-arbitrary-values": 0,
-  "shadcn-vue/no-inline-styles": 0,
+  "shadcn-vue/no-restyle": 296,
+  "shadcn-vue/no-raw-colors": 8,
+  "shadcn-vue/no-arbitrary-values": 8,
+  "shadcn-vue/no-inline-styles": 3,
   "shadcn-vue/require-static-classes": 0,
-  "shadcn-vue/no-unknown-classes": 0
+  "shadcn-vue/no-unknown-classes": 52
 }

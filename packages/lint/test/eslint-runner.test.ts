@@ -184,7 +184,9 @@ describe("eslint runner", () => {
       const restyle = pageResult.messages.find(
         (m) => m.ruleId === "shadcn-vue/no-restyle"
       )!
-      expect(restyle.message).toContain('"bg-red-500" is not allowed on <Button>')
+      expect(restyle.message).toContain(
+        '"bg-red-500" is not allowed on <Button>'
+      )
       expect(restyle.message).toContain(
         "Use a variant: default, outline. Add a new variant in components/ui/button/Button.vue"
       )
@@ -222,7 +224,12 @@ describe("eslint runner", () => {
       ],
     }
     expect(
-      verify(PROJECT, PAGE, sfc(button, `<Button class="mt-4">Go</Button>`), closed)
+      verify(
+        PROJECT,
+        PAGE,
+        sfc(button, `<Button class="mt-4">Go</Button>`),
+        closed
+      )
     ).toEqual([])
     const shut = verify(
       PROJECT,

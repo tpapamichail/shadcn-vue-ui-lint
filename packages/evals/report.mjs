@@ -66,7 +66,9 @@ if (hasControl) {
     `| Mean rounds used | n/a | ${meanRounds((r) => r.b)} | ${meanRounds((r) => r.c)} |`
   )
 } else {
-  lines.push(`| Metric | Before (no lint) | After (@tpapamichail/shadcn-vue-lint) |`)
+  lines.push(
+    `| Metric | Before (no lint) | After (@tpapamichail/shadcn-vue-lint) |`
+  )
   lines.push(`|---|---|---|`)
   lines.push(`| Total violations | ${totalA} | ${totalC} |`)
   lines.push(
@@ -158,7 +160,7 @@ for (const r of results) {
   }
   lines.push(`<details><summary>Before — ${r.file}</summary>`)
   lines.push(``)
-  lines.push("```tsx")
+  lines.push("```vue")
   lines.push(readOutput(r.task, "a", r.file).trim())
   lines.push("```")
   lines.push(``)
@@ -166,7 +168,7 @@ for (const r of results) {
   lines.push(``)
   lines.push(`<details><summary>After — ${r.file}</summary>`)
   lines.push(``)
-  lines.push("```tsx")
+  lines.push("```vue")
   lines.push(readOutput(r.task, "c", r.file).trim())
   lines.push("```")
   lines.push(``)

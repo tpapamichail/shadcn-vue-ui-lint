@@ -121,7 +121,7 @@ describe('settings["shadcn-vue"].ui', () => {
       })
     ).toEqual([])
     expect(warnings).toEqual([
-      "[@tpapamichail/shadcn-vue-lint] settings[\"shadcn-vue\"].ui must be a string or an array of strings; it is ignored.",
+      '[@tpapamichail/shadcn-vue-lint] settings["shadcn-vue"].ui must be a string or an array of strings; it is ignored.',
     ])
   })
 })
@@ -184,9 +184,15 @@ describe('settings["shadcn-vue"] as shared defaults', () => {
       lint(PROJECT, PAGE, code, { "shadcn-vue/no-restyle": "error" })
     ).toHaveLength(1)
     expect(
-      lint(PROJECT, PAGE, code, { "shadcn-vue/no-restyle": "error" }, {
-        "shadcn-vue": { ignoreImports: ["^@/components/ui/"] },
-      })
+      lint(
+        PROJECT,
+        PAGE,
+        code,
+        { "shadcn-vue/no-restyle": "error" },
+        {
+          "shadcn-vue": { ignoreImports: ["^@/components/ui/"] },
+        }
+      )
     ).toEqual([])
   })
 })
@@ -210,14 +216,9 @@ describe("allow validation", () => {
   })
 
   test("a misspelled category is a line-1 finding with a suggestion", () => {
-    const found = lint(
-      PROJECT,
-      PAGE,
-      template(`<div class="p-[13px]" />`),
-      {
-        "shadcn-vue/no-arbitrary-values": ["error", { allow: ["spacig"] }],
-      }
-    )
+    const found = lint(PROJECT, PAGE, template(`<div class="p-[13px]" />`), {
+      "shadcn-vue/no-arbitrary-values": ["error", { allow: ["spacig"] }],
+    })
     expect(found).toHaveLength(1)
     expect(found[0]).toMatchObject({
       ruleId: "shadcn-vue/no-arbitrary-values",
@@ -240,14 +241,9 @@ describe("allow validation", () => {
       ).toEqual([])
     }
     expect(
-      lint(
-        PROJECT,
-        PAGE,
-        template(`<div class="w-[320px] p-[13px]" />`),
-        {
-          "shadcn-vue/no-arbitrary-values": ["error", { allow: ["w-[320px]"] }],
-        }
-      )
+      lint(PROJECT, PAGE, template(`<div class="w-[320px] p-[13px]" />`), {
+        "shadcn-vue/no-arbitrary-values": ["error", { allow: ["w-[320px]"] }],
+      })
     ).toMatchObject([{ line: 2, message: expect.stringContaining("p-[13px]") }])
   })
 
@@ -261,14 +257,9 @@ describe("allow validation", () => {
 
   test("no-unknown-classes keeps accepting bare custom names", () => {
     expect(
-      lint(
-        PROJECT,
-        PAGE,
-        template(`<div class="toaster" />`),
-        {
-          "shadcn-vue/no-unknown-classes": ["error", { allow: ["toaster"] }],
-        }
-      )
+      lint(PROJECT, PAGE, template(`<div class="toaster" />`), {
+        "shadcn-vue/no-unknown-classes": ["error", { allow: ["toaster"] }],
+      })
     ).toEqual([])
   })
 })

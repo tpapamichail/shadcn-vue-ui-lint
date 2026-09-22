@@ -235,10 +235,7 @@ describe("variants from props", () => {
 
   test("a factory in the barrel beside the component names its variants", () => {
     const button = componentWithBarrel("Button.vue", buttonBarrel)
-    expect(variantNamesFor(button, "Button")).toEqual([
-      "default",
-      "outline",
-    ])
+    expect(variantNamesFor(button, "Button")).toEqual(["default", "outline"])
     expect(sizeNamesFor(button, "Button")).toEqual(["default", "sm"])
   })
 

@@ -149,9 +149,7 @@ async function renderAttempt({ workdir, taskFile, outPng, withChildren }) {
       viewport: { width: 800, height: 600 },
       deviceScaleFactor: 2,
     })
-    await page.goto(
-      `file://${path.join(previewDir, "dist", "index.html")}`
-    )
+    await page.goto(`file://${path.join(previewDir, "dist", "index.html")}`)
     await page.waitForTimeout(300)
     // Crop to the rendered component (plus margin) so small subjects
     // like a lone badge stay legible to the judge.

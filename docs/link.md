@@ -40,7 +40,7 @@ component's `link` variant:
 
 ```vue
 <script setup lang="ts">
-import { Button } from '@/components/ui/button'
+import { Button } from "@/components/ui/button"
 </script>
 
 <template>
@@ -69,10 +69,10 @@ the project:
 
 ```ts
 export default defineNuxtConfig({
-  modules: ['shadcn-nuxt'],
+  modules: ["shadcn-nuxt"],
   shadcn: {
-    prefix: '',
-    componentDir: '@/components/ui',
+    prefix: "",
+    componentDir: "@/components/ui",
   },
 })
 ```
@@ -94,7 +94,7 @@ For the shadcn-vue link style:
 
 ```vue
 <script setup lang="ts">
-import { Button } from '@/components/ui/button'
+import { Button } from "@/components/ui/button"
 </script>
 
 <template>
@@ -113,11 +113,7 @@ Use a native anchor in both Vue and Nuxt:
 
 ```vue
 <template>
-  <a
-    href="https://example.com"
-    target="_blank"
-    rel="noopener noreferrer"
-  >
+  <a href="https://example.com" target="_blank" rel="noopener noreferrer">
     Open the external site
   </a>
 </template>
@@ -128,10 +124,10 @@ tab is intentional.
 
 ## Choosing the element
 
-| Destination | Vue | Nuxt |
-| --- | --- | --- |
-| Internal route | `RouterLink` | `NuxtLink` |
-| External URL | `<a href="...">` | `<a href="...">` |
+| Destination                                 | Vue                                                  | Nuxt                                               |
+| ------------------------------------------- | ---------------------------------------------------- | -------------------------------------------------- |
+| Internal route                              | `RouterLink`                                         | `NuxtLink`                                         |
+| External URL                                | `<a href="...">`                                     | `<a href="...">`                                   |
 | Internal route with shadcn-vue link styling | `Button as-child variant="link"` around `RouterLink` | `Button as-child variant="link"` around `NuxtLink` |
 
 See the official [shadcn-vue Button documentation](https://www.shadcn-vue.com/docs/components/button),

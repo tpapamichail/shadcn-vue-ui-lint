@@ -1,15 +1,11 @@
 <script setup lang="ts">
 import { cn } from "@/lib/utils"
+
 import { badgeVariants } from "./variants"
 
 const props = defineProps<{
   variant?:
-    | "default"
-    | "secondary"
-    | "destructive"
-    | "outline"
-    | "ghost"
-    | "link"
+    "default" | "secondary" | "destructive" | "outline" | "ghost" | "link"
   class?: string
 }>()
 </script>

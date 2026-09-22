@@ -15,7 +15,11 @@ const tester = createTester()
 // its parserServices carry no template visitor — the way a run without
 // vue-eslint-parser reads every .vue file.
 const scriptLinter = new Linter({ cwd: PROJECT })
-const scriptLint = (filename: string, code: string, rule = "no-unknown-classes") =>
+const scriptLint = (
+  filename: string,
+  code: string,
+  rule = "no-unknown-classes"
+) =>
   scriptLinter.verify(
     code,
     [
@@ -106,7 +110,10 @@ describe("vue templates", () => {
 
   test("does not warn for a plain .ts file", () => {
     expect(
-      scriptLint(path.join(PROJECT, "app/page.ts"), `const classes = "flex p-4"\n`)
+      scriptLint(
+        path.join(PROJECT, "app/page.ts"),
+        `const classes = "flex p-4"\n`
+      )
     ).toEqual([])
     expect(
       warnings.filter((message) => message.includes("no template parser"))

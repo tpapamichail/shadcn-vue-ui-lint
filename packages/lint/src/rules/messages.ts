@@ -70,7 +70,7 @@ function noteFor(context: any) {
   if (typeof note !== "string") {
     warnOnce(
       "settings:note",
-      "settings[\"shadcn-vue\"].note must be a string; it is ignored."
+      'settings["shadcn-vue"].note must be a string; it is ignored.'
     )
     return ""
   }
@@ -162,7 +162,10 @@ export function reporter(
   options: { rule?: string; message?: unknown } = {}
 ) {
   const note = noteFor(context)
-  const ruleMessage = ruleMessageFor(options.rule ?? "shadcn-vue", options.message)
+  const ruleMessage = ruleMessageFor(
+    options.rule ?? "shadcn-vue",
+    options.message
+  )
   return (descriptor: any, override?: string | null) => {
     const text =
       typeof override === "string" && override.trim() !== ""

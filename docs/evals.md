@@ -200,11 +200,14 @@ bounded search, not proof that no other bypass exists.
 
 ## The registry
 
-A registry snapshot, 485 files at the pinned ref, is scanned on every
+A registry snapshot, 598 files at the pinned ref, is scanned on every
 release and the build fails if any rule's count rises above the
-[baseline](../packages/evals/scripts/corpus-baseline.json), 602 findings
-today, 534 of them `no-restyle`. Those are accepted counts for that
-snapshot, not expected counts for an application. See
+[baseline](../packages/evals/scripts/corpus-baseline.json), 367 findings
+today, 296 of them `no-restyle`. The snapshot is the shadcn-vue
+registry, idiomatic Vue source; an earlier state of this page measured
+the React original instead, and its 602 findings belong to that
+snapshot. Those are accepted counts, not expected counts for an
+application. See
 [the registry corpus](../CONTRIBUTING.md#the-registry-corpus) for the
 update process.
 

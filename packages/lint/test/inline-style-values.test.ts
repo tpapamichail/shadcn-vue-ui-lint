@@ -333,9 +333,9 @@ describe("CSS color leaves", () => {
   })
 
   test("a static template still reports its named color", () => {
-    expect(messages(template(`<div :style="{ '--tint': \`red\` }" />`))).toEqual(
-      ["customPropColor"]
-    )
+    expect(
+      messages(template(`<div :style="{ '--tint': \`red\` }" />`))
+    ).toEqual(["customPropColor"])
   })
 
   test("a template URL keeps all literal pieces inside the URL", () => {

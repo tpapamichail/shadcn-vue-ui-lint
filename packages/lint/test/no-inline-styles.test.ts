@@ -83,7 +83,9 @@ describe("no-inline-styles", () => {
           errors: [{ messageId: "inlineStyle" }],
         },
         {
-          code: template(`<div class="bg-(--x)" :style="{ '--x': '#ff00aa' }" />`),
+          code: template(
+            `<div class="bg-(--x)" :style="{ '--x': '#ff00aa' }" />`
+          ),
           errors: [{ messageId: "customPropColor" }],
         },
         {
@@ -196,11 +198,15 @@ describe("colors in templates and gradient stops", () => {
       valid: [
         {
           filename: PAGE,
-          code: template(`<div :style="{ '--icon': 'url(orange-icon.svg)' }" />`),
+          code: template(
+            `<div :style="{ '--icon': 'url(orange-icon.svg)' }" />`
+          ),
         },
         {
           filename: PAGE,
-          code: template(`<div :style="{ '--paint': \`var(--color-primary)\` }" />`),
+          code: template(
+            `<div :style="{ '--paint': \`var(--color-primary)\` }" />`
+          ),
         },
       ],
       invalid: [

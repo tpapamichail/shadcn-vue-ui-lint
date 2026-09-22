@@ -133,10 +133,7 @@ describe("modules", () => {
     const dir = fs.realpathSync.native(
       fs.mkdtempSync(path.join(os.tmpdir(), "shadcn-lint-script-"))
     )
-    fs.writeFileSync(
-      path.join(dir, "phantom.ts"),
-      "export const Phantom = 1"
-    )
+    fs.writeFileSync(path.join(dir, "phantom.ts"), "export const Phantom = 1")
     const ghost = path.join(dir, "Ghost.vue")
     fs.writeFileSync(
       ghost,

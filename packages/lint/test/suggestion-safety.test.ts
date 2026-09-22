@@ -46,9 +46,7 @@ describe("editor suggestions keep the source valid", () => {
     )
     expect(entity.messages.some((m) => m.fatal)).toBe(false)
 
-    const newline = applyFirst(
-      sfc("", `<div class="bg-zinc-100\n  w-full" />`)
-    )
+    const newline = applyFirst(sfc("", `<div class="bg-zinc-100\n  w-full" />`))
     expect(newline.fixed).toBe(sfc("", `<div class="bg-muted\n  w-full" />`))
     expect(newline.messages).toEqual([])
 

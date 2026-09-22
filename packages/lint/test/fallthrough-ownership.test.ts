@@ -15,7 +15,7 @@ import * as fs from "node:fs"
 import * as os from "node:os"
 import * as path from "node:path"
 import type { RuleDefinition } from "@eslint/core"
-import { afterEach, beforeEach, describe, expect, test } from "vitest"
+import { afterEach, beforeEach, describe, test } from "vitest"
 
 import { clearWrapperCache } from "../src/project/wrappers"
 import { noRestyle } from "../src/rules/no-restyle"

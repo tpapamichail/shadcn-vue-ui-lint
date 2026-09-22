@@ -14,9 +14,7 @@ const props = withDefaults(
   <div
     data-slot="tabs"
     :data-orientation="props.orientation"
-    :class="
-      cn('group/tabs flex gap-2 data-horizontal:flex-col', props.class)
-    "
+    :class="cn('group/tabs flex gap-2 data-horizontal:flex-col', props.class)"
   >
     <slot />
   </div>

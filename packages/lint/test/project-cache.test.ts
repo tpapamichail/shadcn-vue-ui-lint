@@ -286,9 +286,9 @@ test.skipIf(!oracleAvailable())(
       'export default { ".plugin-old": { display: "grid" } }'
     )
     const candidates = ["plugin-old", "plugin-new"]
-    expect(unknownClasses(css, candidates)?.map((entry) => entry.token)).toEqual(
-      ["plugin-new"]
-    )
+    expect(
+      unknownClasses(css, candidates)?.map((entry) => entry.token)
+    ).toEqual(["plugin-new"])
 
     write(
       "utilities.mjs",
@@ -296,9 +296,9 @@ test.skipIf(!oracleAvailable())(
     )
     fs.appendFileSync(entry, "\n// Reload the imported utilities.\n")
     await new Promise((resolve) => setTimeout(resolve, 1200))
-    expect(unknownClasses(css, candidates)?.map((entry) => entry.token)).toEqual(
-      ["plugin-old"]
-    )
+    expect(
+      unknownClasses(css, candidates)?.map((entry) => entry.token)
+    ).toEqual(["plugin-old"])
   }
 )
 

@@ -203,13 +203,18 @@ function declarationsIn(ast: Node) {
       id?.type === "Identifier"
     ) {
       types.set(idName ?? "", child(node, "body"))
-    } else if (node.type === "VariableDeclarator" && id?.type === "Identifier") {
+    } else if (
+      node.type === "VariableDeclarator" &&
+      id?.type === "Identifier"
+    ) {
       const init = child(node, "init")
       const unwrapped =
-        init?.type === "TSAsExpression" || init?.type === "TSSatisfiesExpression"
+        init?.type === "TSAsExpression" ||
+        init?.type === "TSSatisfiesExpression"
           ? child(init, "expression")
           : init
-      if (unwrapped?.type === "ObjectExpression") objects.set(idName ?? "", unwrapped)
+      if (unwrapped?.type === "ObjectExpression")
+        objects.set(idName ?? "", unwrapped)
     }
   })
   return { types, objects }

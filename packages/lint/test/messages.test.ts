@@ -496,6 +496,8 @@ describe('settings["shadcn-vue"].note', () => {
     } finally {
       setWarningSink((message) => console.warn(message))
     }
-    expect(warnings.some((w) => w.includes('settings["shadcn-vue"].note'))).toBe(true)
+    expect(
+      warnings.some((w) => w.includes('settings["shadcn-vue"].note'))
+    ).toBe(true)
   })
 })

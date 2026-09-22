@@ -69,6 +69,7 @@ deep. Imported values and unknown function calls are reported:
 ```vue
 <script setup lang="ts">
 import { Button } from "@/components/ui/button"
+
 import { buttonClasses } from "./styles"
 
 const layout = "mt-4 w-full"
@@ -116,8 +117,8 @@ not resolve every function those factories return:
 
 ```vue
 <script setup lang="ts">
-import { cva } from "class-variance-authority"
 import { Button } from "@/components/ui/button"
+import { cva } from "class-variance-authority"
 
 const buttonVariants = cva("w-full")
 </script>

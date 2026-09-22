@@ -96,5 +96,7 @@ test("with no Tailwind entry to discover, the warning says the grammar answers",
   const page = path.join(root, "src/app/page.vue")
   expect(tailwindEntryFor(page)).toBeNull()
   expect(warnings).toHaveLength(1)
-  expect(warnings[0]).toContain("grammar bundled with @tpapamichail/shadcn-vue-lint")
+  expect(warnings[0]).toContain(
+    "grammar bundled with @tpapamichail/shadcn-vue-lint"
+  )
 })

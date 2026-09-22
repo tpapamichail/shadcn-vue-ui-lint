@@ -122,7 +122,10 @@ const cases: [string, string | null][] = [
     "Button color is a variant: default, outline, secondary, ghost, destructive, link. A new treatment is a new variant in components/ui/button/Button.vue, not a class.",
   ],
   ['<Button class="col-span-2 self-end">Go</Button>', null],
-  ['<CardTitle class="text-xs font-medium tracking-tight">Hi</CardTitle>', null],
+  [
+    '<CardTitle class="text-xs font-medium tracking-tight">Hi</CardTitle>',
+    null,
+  ],
   [
     '<CardTitle class="text-red-500">Hi</CardTitle>',
     "Text color on <CardTitle> is a token through a variant, not a class.",

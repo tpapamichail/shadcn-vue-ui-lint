@@ -131,10 +131,7 @@ describe("ordinary prop shapes reach the rules", () => {
         valid: [
           {
             filename: PAGE,
-            code: sfc(
-              `const n = 8`,
-              `<div :class="\`mt-\${n} w-full\`" />`
-            ),
+            code: sfc(`const n = 8`, `<div :class="\`mt-\${n} w-full\`" />`),
           },
         ],
         invalid: [],

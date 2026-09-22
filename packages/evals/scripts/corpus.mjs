@@ -10,9 +10,10 @@
 import * as fs from "node:fs"
 import * as path from "node:path"
 import { fileURLToPath, pathToFileURL } from "node:url"
-import parser from "@typescript-eslint/parser"
+import tsParser from "@typescript-eslint/parser"
 import { ESLint } from "eslint"
 
+import { sfcLanguageOptions } from "../lib/lint.mjs"
 import { rulesAt, UI_RULES } from "../lib/policy.mjs"
 import { ensureRegistry } from "./fetch-registry.mjs"
 
@@ -27,7 +28,7 @@ const { plugin } = await import(
 )
 
 // The registry is fetched at the commit pinned in scripts/registry.json.
-// --dir or SHADCN_UI_DIR point at a local checkout instead.
+// --dir or SHADCN_REGISTRY_DIR point at a local checkout instead.
 const args = process.argv.slice(2)
 const dirIdx = args.indexOf("--dir")
 const topIdx = args.indexOf("--top")
@@ -36,8 +37,11 @@ const onlyRule = ruleIdx !== -1 ? args[ruleIdx + 1] : null
 const targetDir =
   dirIdx !== -1
     ? path.resolve(args[dirIdx + 1])
-    : process.env.SHADCN_UI_DIR
-      ? path.join(process.env.SHADCN_UI_DIR, "apps/v4/registry/new-york-v4")
+    : process.env.SHADCN_REGISTRY_DIR
+      ? path.join(
+          process.env.SHADCN_REGISTRY_DIR,
+          "apps/v4/registry/new-york-v4"
+        )
       : ensureRegistry()
 const REPO_ROOT = path.resolve(targetDir, "../../..")
 const uiPolicy = { rules: UI_RULES }
@@ -53,14 +57,19 @@ const eslint = new ESLint({
   overrideConfigFile: true,
   overrideConfig: [
     {
-      files: ["**/*.tsx"],
-      languageOptions: {
-        parser,
-        parserOptions: { ecmaFeatures: { jsx: true } },
-      },
+      files: ["**/*.vue"],
+      languageOptions: sfcLanguageOptions(),
       plugins: { "shadcn-vue": plugin },
       // Every rule at warn: the preset's five and the opt-in
       // no-unknown-classes, measured alongside.
+      rules: rulesAt("warn", Object.keys(plugin.rules)),
+    },
+    {
+      // Variant barrels and helpers: plain TS whose class strings the
+      // same rules read.
+      files: ["**/*.ts"],
+      languageOptions: { parser: tsParser, sourceType: "module" },
+      plugins: { "shadcn-vue": plugin },
       rules: rulesAt("warn", Object.keys(plugin.rules)),
     },
     // The documented policy inside ui, from lib/policy.mjs.
@@ -68,7 +77,7 @@ const eslint = new ESLint({
   ],
 })
 
-const results = await eslint.lintFiles(["**/*.tsx"])
+const results = await eslint.lintFiles(["**/*.vue", "**/*.ts"])
 
 const byRule = new Map()
 const byClass = new Map()
@@ -118,7 +127,9 @@ if (byClass.size) {
 }
 
 if (onlyRule) {
-  const id = onlyRule.startsWith("shadcn-vue/") ? onlyRule : `shadcn-vue/${onlyRule}`
+  const id = onlyRule.startsWith("shadcn-vue/")
+    ? onlyRule
+    : `shadcn-vue/${onlyRule}`
   console.log(`\nEvery finding of ${id}:`)
   for (const f of flagged.filter((f) => f.rule === id)) {
     console.log(`  ${f.file}:${f.line}  ${f.message}`)

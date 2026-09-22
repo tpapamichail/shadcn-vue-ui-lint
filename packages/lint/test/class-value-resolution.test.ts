@@ -113,9 +113,9 @@ describe("forwarded values retain their local alternatives", () => {
       `<Button :class="props.class" />`,
     ],
   ])("revokes reading after a write: %s", (script, markup) => {
-    expect(lint(sfc(`${button}\n${cn}\n${script}`, markup)).map((m) => m.ruleId)).toContain(
-      "shadcn-vue/require-static-classes"
-    )
+    expect(
+      lint(sfc(`${button}\n${cn}\n${script}`, markup)).map((m) => m.ruleId)
+    ).toContain("shadcn-vue/require-static-classes")
   })
 
   test.each([
@@ -153,10 +153,7 @@ describe("forwarded values retain their local alternatives", () => {
       `const props = defineProps<{ class?: string }>()`,
       `<Button :class="props.class" v-bind="props" />`,
     ],
-    [
-      `const attrs = useAttrs()`,
-      `<Button :class="attrs.class" />`,
-    ],
+    [`const attrs = useAttrs()`, `<Button :class="attrs.class" />`],
     [
       `const props = defineProps<{ class?: string; disabled?: boolean }>()\nconst { disabled } = props`,
       `<Button :class="props.class" :disabled="disabled" />`,
@@ -177,25 +174,19 @@ describe("forwarded values retain their local alternatives", () => {
       `const classes = { root: "w-full" }`,
       `<Button v-bind="{ class: classes }" />`,
     ],
-    [
-      `const classes = { "w-full": true }`,
-      `<Button :class="cn(classes)" />`,
-    ],
-    [
-      `const spacing = { "--gap": "4px" }`,
-      `<div :style="spacing" />`,
-    ],
-    [
-      `import { props } from "./opaque"`,
-      `<Button v-bind="props" />`,
-    ],
+    [`const classes = { "w-full": true }`, `<Button :class="cn(classes)" />`],
+    [`const spacing = { "--gap": "4px" }`, `<div :style="spacing" />`],
+    [`import { props } from "./opaque"`, `<Button v-bind="props" />`],
     [
       `const props = defineProps<{ class?: string }>()`,
       `<Button v-bind="props" />`,
     ],
-  ])("keeps untouched values and non-escaping reads clean: %s", (script, markup) => {
-    expect(lint(sfc(`${button}\n${cn}\n${script}`, markup))).toEqual([])
-  })
+  ])(
+    "keeps untouched values and non-escaping reads clean: %s",
+    (script, markup) => {
+      expect(lint(sfc(`${button}\n${cn}\n${script}`, markup))).toEqual([])
+    }
+  )
 
   test("a helper call escapes an object for later member reads", () => {
     expect(
@@ -299,7 +290,10 @@ describe("partly understood values stay unresolved", () => {
         // A number glued to text is a class the collector cannot read.
         {
           filename: PAGE,
-          code: sfc(`${button}\nconst n = 8`, `<Button :class="\`p-\${n}\`">Go</Button>`),
+          code: sfc(
+            `${button}\nconst n = 8`,
+            `<Button :class="\`p-\${n}\`">Go</Button>`
+          ),
           errors: [{ messageId: "dynamicClasses" }],
         },
         // Spelled class, but not the component's prop.
@@ -361,7 +355,10 @@ describe("partly understood values stay unresolved", () => {
         {
           filename: PAGE,
           options,
-          code: sfc(button, `<Button v-bind="{ ...{ class: 'bg-red-500' } }" />`),
+          code: sfc(
+            button,
+            `<Button v-bind="{ ...{ class: 'bg-red-500' } }" />`
+          ),
           errors: [{ messageId: "appearanceClassWithVariants" }],
         },
         {
@@ -374,7 +371,10 @@ describe("partly understood values stay unresolved", () => {
         {
           filename: PAGE,
           options,
-          code: sfc(button, `<Button v-bind="{ class: { inner: 'bg-red-500' } }">Go</Button>`),
+          code: sfc(
+            button,
+            `<Button v-bind="{ class: { inner: 'bg-red-500' } }">Go</Button>`
+          ),
           errors: [{ messageId: "appearanceClassWithVariants" }],
         },
         // A same-file object never written to is read.

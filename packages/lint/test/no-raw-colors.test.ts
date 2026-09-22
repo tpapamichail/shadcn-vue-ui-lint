@@ -420,10 +420,7 @@ describe("no-raw-colors sees the same shapes", () => {
         },
         {
           filename: PAGE,
-          code: sfc(
-            `const c = "bg-pink-500"`,
-            `<div :class="c || 'flex'" />`
-          ),
+          code: sfc(`const c = "bg-pink-500"`, `<div :class="c || 'flex'" />`),
           errors: [{ messageId: "paletteClassFar" }],
         },
       ],

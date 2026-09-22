@@ -1,24 +1,13 @@
 <script setup lang="ts">
 import { cn } from "@/lib/utils"
+
 import { buttonVariants } from "./variants"
 
 const props = defineProps<{
   variant?:
-    | "default"
-    | "outline"
-    | "secondary"
-    | "ghost"
-    | "destructive"
-    | "link"
+    "default" | "outline" | "secondary" | "ghost" | "destructive" | "link"
   size?:
-    | "default"
-    | "xs"
-    | "sm"
-    | "lg"
-    | "icon"
-    | "icon-xs"
-    | "icon-sm"
-    | "icon-lg"
+    "default" | "xs" | "sm" | "lg" | "icon" | "icon-xs" | "icon-sm" | "icon-lg"
   class?: string
 }>()
 </script>

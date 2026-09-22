@@ -30,9 +30,7 @@ describe("no-raw-colors and theme namespaces", () => {
         // --shadow-card-glow and --drop-shadow-lift: box-shadows.
         {
           filename: PAGE,
-          code: template(
-            `<div class="shadow-card-glow drop-shadow-lift" />`
-          ),
+          code: template(`<div class="shadow-card-glow drop-shadow-lift" />`),
         },
         // bg-* reads --background-image-*, where the namespace and the
         // prefix are not the same word.

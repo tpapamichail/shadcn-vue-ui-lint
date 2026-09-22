@@ -11,8 +11,8 @@ import { execFileSync } from "node:child_process"
 import * as path from "node:path"
 import { pathToFileURL } from "node:url"
 import tsParser from "@typescript-eslint/parser"
-import vueParser from "vue-eslint-parser"
 import { ESLint } from "eslint"
+import vueParser from "vue-eslint-parser"
 
 import { RULES, UI_RULES } from "../lib/policy.mjs"
 

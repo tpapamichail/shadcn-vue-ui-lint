@@ -179,8 +179,7 @@ export async function readComponent(workdir, taskFile) {
                 : { local: nameOf(specifier.local) }
             )
           }
-          if (statement.source)
-            module.reexports.push(statement.source.value)
+          if (statement.source) module.reexports.push(statement.source.value)
         }
         if (
           statement.type === "ExportAllDeclaration" &&
@@ -337,7 +336,11 @@ export async function readComponent(workdir, taskFile) {
         const target = resolveLocal(source, module.file, workdir)
         if (!target) {
           findings.push(
-            finding("build-error", `Could not resolve "${source}".`, module.file)
+            finding(
+              "build-error",
+              `Could not resolve "${source}".`,
+              module.file
+            )
           )
           continue
         }

@@ -9,6 +9,7 @@
 // which runs after the script — imports are collected before any
 // template site resolves.
 
+import { walk } from "../project/ast"
 import {
   componentFromImport,
   importNameOf,
@@ -22,7 +23,6 @@ import { warnOnce } from "../project/warn"
 import { wrapperTargetOf, type WrapperTarget } from "../project/wrappers"
 import { fileOf } from "../rules/messages"
 import { withSettings } from "../rules/settings"
-import { walk } from "../project/ast"
 
 export type ClassString = {
   value: string
@@ -215,7 +215,12 @@ export function createComponentTracker(
       if (imported) {
         const importedName = importNameOf(imported, name, null)
         const binding = bindingOf(name, imported.original)
-        const component = componentFromImport(index, binding, importedName, patterns)
+        const component = componentFromImport(
+          index,
+          binding,
+          importedName,
+          patterns
+        )
         if (component) return { ...component, wrapper: null }
         if (binding) {
           if (NODE_MODULES.test(binding.file)) return null
@@ -231,7 +236,9 @@ export function createComponentTracker(
           return {
             component: name,
             file:
-              index.files.get(name) ?? index.files.get(imported.original) ?? null,
+              index.files.get(name) ??
+              index.files.get(imported.original) ??
+              null,
             wrapper: null,
           }
         }
@@ -526,10 +533,13 @@ export function resolveIdentifier(node: any, context: any, path: Set<any>) {
 // `useAttrs()`, and the locals a destructured `class` or `style` prop
 // binds. Vue passes class and style by fallthrough; a value that is one
 // of these reads is the received prop, opaque to this file.
-const classReceivers = new WeakMap<object, {
-  receivers: Set<string>
-  locals: Map<string, string>
-}>()
+const classReceivers = new WeakMap<
+  object,
+  {
+    receivers: Set<string>
+    locals: Map<string, string>
+  }
+>()
 
 function receiversOfContext(context: any) {
   const cached = classReceivers.get(context)
@@ -611,9 +621,7 @@ export function forwardedValuesOf(
       }
     }
   } else if (node?.type === "MemberExpression") {
-    const key = node.computed
-      ? staticKey(node.property)
-      : node.property?.name
+    const key = node.computed ? staticKey(node.property) : node.property?.name
     const object = unwrapTs(node.object)
     if (key !== name || object?.type !== "Identifier") return null
     if (!receivers.has(object.name)) return null
@@ -638,9 +646,7 @@ export function forwardedValuesOf(
       if (runtime?.type === "ObjectExpression") {
         const found = resolveProperty(runtime, name, context, path)
         const shape =
-          found.value && !found.uncertain
-            ? unwrapTs(found.value)
-            : null
+          found.value && !found.uncertain ? unwrapTs(found.value) : null
         if (shape?.type === "ObjectExpression") {
           const inner = resolveProperty(shape, "default", context, path)
           if (inner.uncertain) alternatives.push({ unresolved: shape })
@@ -1185,7 +1191,8 @@ function sharedFor(context: any, options: SiteOptions): Shared {
     consumedCalls,
     imports: new Set(),
     sites: new Map(),
-    hasSites: typeof text !== "string" || /class/i.test(text) || helperCall.test(text),
+    hasSites:
+      typeof text !== "string" || /class/i.test(text) || helperCall.test(text),
   }
   byOptions.set(key, shared)
   return shared
@@ -1224,7 +1231,13 @@ function spreadSites(
     }
     for (const [key, value] of finals) {
       list.push(
-        makeSite(value, value, key, resolved, element?.type === "VElement" ? element : null)
+        makeSite(
+          value,
+          value,
+          key,
+          resolved,
+          element?.type === "VElement" ? element : null
+        )
       )
     }
   }
@@ -1239,7 +1252,7 @@ export function warnUnreadTemplates(context: any) {
   if (isSfc(fileOf(context))) {
     warnOnce(
       "templates:unread",
-      "Templates in .vue files are read under ESLint with vue-eslint-parser. This run has no template parser, so only their script blocks are linted. See https://github.com/shadcn-ui/lint/blob/main/docs/vue.md."
+      "Templates in .vue files are read under ESLint with vue-eslint-parser. This run has no template parser, so only their script blocks are linted. See https://github.com/tpapamichail/shadcn-vue-ui-lint#get-started."
     )
   }
 }

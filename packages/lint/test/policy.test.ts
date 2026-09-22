@@ -239,7 +239,7 @@ describe("no-inline-styles", () => {
         },
         {
           code: template(
-            "<Motion :style=\"{ transform: `translateX(${x}px)` }\" />"
+            '<Motion :style="{ transform: `translateX(${x}px)` }" />'
           ),
           options: [
             { contracts: [{ pattern: "^Motion$", allow: ["transform"] }] },

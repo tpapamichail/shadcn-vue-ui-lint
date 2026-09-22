@@ -3,11 +3,9 @@
 // never exceed the checked-in baseline. Lower them in the baseline as
 // the registry migrates toward deliberate-zero; never raise them.
 //
-// The baseline reflects the current Vue-only plugin's site collection
-// over the React-sourced registry corpus: JSX class sites are not
-// collected by design, so the honest per-rule measurement is zero and
-// the gate is strict — any finding over this corpus fails. Retargeting
-// the corpus to a Vue registry is future work.
+// The corpus is the pinned shadcn-vue registry snapshot: idiomatic Vue
+// source, so every finding here is either a rule bug or a registry
+// bug, and the accepted counts live in corpus-baseline.json.
 //
 // Usage:
 //   node scripts/check-corpus.mjs            # verify against baseline
@@ -15,9 +13,10 @@
 import * as fs from "node:fs"
 import * as path from "node:path"
 import { fileURLToPath, pathToFileURL } from "node:url"
-import parser from "@typescript-eslint/parser"
+import tsParser from "@typescript-eslint/parser"
 import { ESLint } from "eslint"
 
+import { sfcLanguageOptions } from "../lib/lint.mjs"
 import { rulesAt, UI_RULES } from "../lib/policy.mjs"
 import { ensureRegistry } from "./fetch-registry.mjs"
 
@@ -35,13 +34,16 @@ const uiPolicy = { rules: UI_RULES }
 
 // The registry is fetched at the commit pinned in scripts/registry.json
 // so the baseline is reproducible anywhere, CI included. --dir or
-// SHADCN_UI_DIR point at a local checkout instead.
+// SHADCN_REGISTRY_DIR point at a local checkout instead.
 const dirIdx = process.argv.indexOf("--dir")
 const TARGET =
   dirIdx !== -1
     ? path.resolve(process.argv[dirIdx + 1])
-    : process.env.SHADCN_UI_DIR
-      ? path.join(process.env.SHADCN_UI_DIR, "apps/v4/registry/new-york-v4")
+    : process.env.SHADCN_REGISTRY_DIR
+      ? path.join(
+          process.env.SHADCN_REGISTRY_DIR,
+          "apps/v4/registry/new-york-v4"
+        )
       : ensureRegistry()
 if (!fs.existsSync(TARGET)) {
   console.error(`Registry not found at ${TARGET}.`)
@@ -54,11 +56,16 @@ const eslint = new ESLint({
   overrideConfigFile: true,
   overrideConfig: [
     {
-      files: ["**/*.tsx"],
-      languageOptions: {
-        parser,
-        parserOptions: { ecmaFeatures: { jsx: true } },
-      },
+      files: ["**/*.vue"],
+      languageOptions: sfcLanguageOptions(),
+      plugins: { "shadcn-vue": plugin },
+      rules: rulesAt("warn", Object.keys(plugin.rules)),
+    },
+    {
+      // Variant barrels and helpers: plain TS whose class strings the
+      // same rules read.
+      files: ["**/*.ts"],
+      languageOptions: { parser: tsParser, sourceType: "module" },
       plugins: { "shadcn-vue": plugin },
       rules: rulesAt("warn", Object.keys(plugin.rules)),
     },
@@ -67,7 +74,7 @@ const eslint = new ESLint({
   ],
 })
 
-const results = await eslint.lintFiles(["**/*.tsx"])
+const results = await eslint.lintFiles(["**/*.vue", "**/*.ts"])
 const counts = {}
 const fatal = []
 for (const rule of Object.keys(plugin.rules)) counts[`shadcn-vue/${rule}`] = 0

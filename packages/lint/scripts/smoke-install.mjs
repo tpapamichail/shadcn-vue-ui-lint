@@ -177,10 +177,7 @@ export default [
     `pnpm add -D --ignore-workspace ${JSON.stringify(tarball)} eslint@9 vue-eslint-parser @typescript-eslint/parser tailwindcss@4`
   )
   const installed = JSON.parse(
-    fs.readFileSync(
-      path.join(dir, `node_modules/${PKG}/package.json`),
-      "utf-8"
-    )
+    fs.readFileSync(path.join(dir, `node_modules/${PKG}/package.json`), "utf-8")
   )
   // The optional parser must resolve from the installed package itself.
   const probe = spawnSync(

@@ -367,7 +367,8 @@ export const noRawColors = {
         const name = node.directive ? key?.argument?.name : key?.name
         if (typeof name !== "string" || !COLOR_ATTRIBUTES.has(name)) return
         const tag = node.parent?.parent
-        if (tag?.type !== "VElement" || !/^[a-z]/.test(tag.rawName ?? "")) return
+        if (tag?.type !== "VElement" || !/^[a-z]/.test(tag.rawName ?? ""))
+          return
         // `fill="red"` and the literal a binding carries read the same.
         const value = node.directive
           ? node.value?.expression?.type === "Literal"

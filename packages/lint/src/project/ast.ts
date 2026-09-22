@@ -23,7 +23,9 @@ export function child<T extends Node = Node>(
   field: string
 ): T | null {
   const value = (node as Record<string, unknown> | null | undefined)?.[field]
-  return value && typeof value === "object" && typeof (value as Node).type === "string"
+  return value &&
+    typeof value === "object" &&
+    typeof (value as Node).type === "string"
     ? (value as T)
     : null
 }

@@ -3,9 +3,9 @@ import * as fs from "node:fs"
 import * as os from "node:os"
 import * as path from "node:path"
 import { fileURLToPath, pathToFileURL } from "node:url"
-import parser from "@typescript-eslint/parser"
 import { ESLint } from "eslint"
 
+import { sfcLanguageOptions } from "../lib/lint.mjs"
 import { rulesAt } from "../lib/policy.mjs"
 
 const { plugin } = await import(
@@ -60,18 +60,33 @@ try {
   const exports = []
   for (let i = 0; i < components; i++) {
     write(
-      `components/ui/control-${i}.tsx`,
-      `export function Control${i}(props) { return <button {...props} /> }`
+      `components/ui/control-${i}.vue`,
+      `<script setup lang="ts">
+const props = defineProps<{ class?: string }>()
+</script>
+
+<template>
+  <button :class="props.class"><slot /></button>
+</template>
+`
     )
-    exports.push(`export { Control${i} } from "./control-${i}"`)
+    exports.push(`export { default as Control${i} } from "./control-${i}.vue"`)
   }
   write("components/ui/index.ts", exports.join("\n"))
   if (wrappers) {
     for (let i = 0; i < components; i++) {
       write(
-        `components/control-${i}.tsx`,
-        `import { Control${i} } from "@/components/ui"
-export function Wrapped${i}(props) { return <Control${i} {...props} /> }`
+        `components/wrapped-${i}.vue`,
+        `<script setup lang="ts">
+import Control${i} from "@/components/ui/control-${i}.vue"
+
+const props = defineProps<{ class?: string }>()
+</script>
+
+<template>
+  <Control${i} :class="props.class"><slot /></Control${i}>
+</template>
+`
       )
     }
   }
@@ -83,26 +98,34 @@ export function Wrapped${i}(props) { return <Control${i} {...props} /> }`
     const prefix = wrappers ? "Wrapped" : "Control"
     const imports = wrappers
       ? names.map(
-          (n) => `import { Wrapped${n} } from "@/components/control-${n}"`
+          (n) => `import ${prefix}${n} from "@/components/wrapped-${n}.vue"`
         )
       : direct
         ? names.map(
-            (n) => `import { Control${n} } from "@/components/ui/control-${n}"`
+            (n) =>
+              `import ${prefix}${n} from "@/components/ui/control-${n}.vue"`
           )
         : [
             `import { ${names.map((n) => `Control${n}`).join(", ")} } from "@/components/ui"`,
           ]
+    const tags = names
+      .map(
+        (n) =>
+          `    <${prefix}${n} class="${clean ? "w-full" : "w-full bg-red-500 rounded-[13px]"}" />`
+      )
+      .join("\n")
     write(
-      `src/features/feature-${i}/screens/page.tsx`,
-      `${imports.join("\n")}
-export function Page() {
-  return <main className="flex flex-col gap-4">${names
-    .map(
-      (n) =>
-        `<${prefix}${n} className="${clean ? "w-full" : "w-full bg-red-500 rounded-[13px]"}" />`
-    )
-    .join("")}</main>
-}`
+      `src/features/feature-${i}/screens/page.vue`,
+      `<script setup lang="ts">
+${imports.join("\n")}
+</script>
+
+<template>
+  <main class="flex flex-col gap-4">
+${tags}
+  </main>
+</template>
+`
     )
   }
 
@@ -120,11 +143,8 @@ export function Page() {
       overrideConfigFile: true,
       overrideConfig: [
         {
-          files: ["**/*.tsx"],
-          languageOptions: {
-            parser,
-            parserOptions: { ecmaFeatures: { jsx: true } },
-          },
+          files: ["**/*.vue"],
+          languageOptions: sfcLanguageOptions(),
           plugins: { "shadcn-vue": plugin },
           rules: enabled ? rulesAt("error", Object.keys(plugin.rules)) : {},
         },
@@ -133,7 +153,7 @@ export function Page() {
     for (let run = 0; run < runs; run++) {
       globalThis.gc?.()
       const start = performance.now()
-      const results = await eslint.lintFiles(["src/**/*.tsx"])
+      const results = await eslint.lintFiles(["src/**/*.vue"])
       const ms = performance.now() - start
       const diagnostics = results.map((result) => ({
         file: path.relative(root, result.filePath),

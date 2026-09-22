@@ -29,7 +29,7 @@ describe("animate values, from cn's grammar", () => {
 // cn groups only Tailwind's own animations, so a project's animation is
 // read from its CSS. These hold whichever cn grammar is installed.
 describe("animate values, from the project's CSS", () => {
-  const PAGE = path.join(__dirname, "fixtures/namespace-theme/app/page.tsx")
+  const PAGE = path.join(__dirname, "fixtures/namespace-theme/app/page.vue")
 
   test.each([
     "animate-shimmer",
@@ -58,7 +58,7 @@ describe("animate values, from the project's CSS", () => {
 
 describe("resolveCnConfig", () => {
   test("falls back to the bundled config where cn is not installed", () => {
-    const config = resolveCnConfig("/nonexistent/project/app/page.tsx")
+    const config = resolveCnConfig("/nonexistent/project/app/page.vue")
     expect(Object.keys(config.classGroups).length).toBeGreaterThan(300)
   })
 
@@ -91,7 +91,7 @@ describe("resolveCnConfig", () => {
       path.join(pkg, "config.js"),
       `module.exports = { defaultConfig: () => ({ classGroups: { "from-this-cn": ["x"] }, theme: {}, conflictingClassGroups: {}, conflictingClassGroupModifiers: {}, orderSensitiveModifiers: [] }) }`
     )
-    return path.join(root, "app/page.tsx")
+    return path.join(root, "app/page.vue")
   }
 
   const warnings: string[] = []
@@ -116,13 +116,13 @@ describe("resolveCnConfig", () => {
     expect(warnings[0]).toContain("cn is 0.2.2")
     expect(warnings[0]).toContain(`bundled cn ${BUNDLED_CN}`)
     // Another file in the same project shares the decision and the warning.
-    resolveCnConfig(path.join(path.dirname(file), "other.tsx"))
+    resolveCnConfig(path.join(path.dirname(file), "other.vue"))
     expect(warnings).toHaveLength(1)
   })
 
   test("one classifier per resolved config", () => {
-    const a = classifierFor("/nonexistent/one/page.tsx")
-    const b = classifierFor("/nonexistent/two/page.tsx")
+    const a = classifierFor("/nonexistent/one/page.vue")
+    const b = classifierFor("/nonexistent/two/page.vue")
     // Both fall back to the same bundled config object, so they share.
     expect(a).toBe(b)
   })

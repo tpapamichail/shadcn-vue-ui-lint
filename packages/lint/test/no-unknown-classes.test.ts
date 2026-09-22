@@ -3,14 +3,7 @@ import { describe, expect, test } from "vitest"
 
 import { noUnknownClasses } from "../src/rules/no-unknown-classes"
 import { oracleAvailable, resetOracleMemo } from "../src/tailwind/client"
-import {
-  button,
-  createTester,
-  PAGE,
-  PROJECT,
-  sfc,
-  template,
-} from "./helpers"
+import { button, createTester, PAGE, PROJECT, sfc, template } from "./helpers"
 
 const tester = createTester()
 

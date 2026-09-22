@@ -4,9 +4,10 @@
 // Node and ESLint startup are excluded. Run: pnpm --filter evals bench
 
 import { plugin } from "@tpapamichail/shadcn-vue-lint"
-import parser from "@typescript-eslint/parser"
+import tsParser from "@typescript-eslint/parser"
 import { ESLint } from "eslint"
 
+import { sfcLanguageOptions } from "../lib/lint.mjs"
 import { RULES, rulesAt, UI_RULES } from "../lib/policy.mjs"
 import { ensureRegistry } from "./fetch-registry.mjs"
 
@@ -14,8 +15,15 @@ const target = ensureRegistry()
 const preset = { rules: RULES }
 const ui = { rules: UI_RULES }
 const base = {
-  files: ["**/*.tsx"],
-  languageOptions: { parser, parserOptions: { ecmaFeatures: { jsx: true } } },
+  files: ["**/*.vue"],
+  languageOptions: sfcLanguageOptions(),
+  plugins: { "shadcn-vue": plugin },
+}
+// Variant barrels and helpers: plain TS whose class strings the same
+// rules read.
+const tsBase = {
+  files: ["**/*.ts"],
+  languageOptions: { parser: tsParser, sourceType: "module" },
   plugins: { "shadcn-vue": plugin },
 }
 async function run(label, rules, uiRules) {
@@ -24,12 +32,13 @@ async function run(label, rules, uiRules) {
     overrideConfigFile: true,
     overrideConfig: [
       { ...base, rules },
+      tsBase,
       { files: ["ui/**"], rules: uiRules },
     ],
   })
-  await eslint.lintFiles(["**/*.tsx"]) // warm parse caches
+  await eslint.lintFiles(["**/*.vue", "**/*.ts"]) // warm parse caches
   const t = process.hrtime.bigint()
-  const results = await eslint.lintFiles(["**/*.tsx"])
+  const results = await eslint.lintFiles(["**/*.vue", "**/*.ts"])
   const ms = Number(process.hrtime.bigint() - t) / 1e6
   const findings = results.reduce(
     (n, r) =>

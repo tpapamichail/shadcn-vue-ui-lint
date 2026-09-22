@@ -79,7 +79,11 @@ function bindExpressionOf(attribute: Node): Node | null {
 // True when the expression hands the component's received class along:
 // a member read of `.class` on a passed-through name, or the local a
 // destructured `class` prop binds.
-function handsClass(expression: Node | null, passed: Set<string>, name: string) {
+function handsClass(
+  expression: Node | null,
+  passed: Set<string>,
+  name: string
+) {
   if (!expression) return false
   if (expression.type === "Identifier") {
     return passed.has(text(expression, "name") ?? "")
@@ -107,7 +111,10 @@ function receivesClass(element: Node, passed: Set<string>, attrs: Set<string>) {
       if (spread !== null && attrs.has(spread)) return true
       continue
     }
-    if (argument === "class" && handsClass(bindExpressionOf(attribute), passed, "class")) {
+    if (
+      argument === "class" &&
+      handsClass(bindExpressionOf(attribute), passed, "class")
+    ) {
       return true
     }
   }
@@ -165,7 +172,10 @@ function inheritAttrsOff(program: Node | null) {
     let object: Node | null = null
     if (node.type === "CallExpression") {
       const callee = child(node, "callee")
-      if (callee?.type === "Identifier" && text(callee, "name") === "defineOptions") {
+      if (
+        callee?.type === "Identifier" &&
+        text(callee, "name") === "defineOptions"
+      ) {
         object = list(node, "arguments")[0] ?? null
       }
     } else if (node.type === "ExportDefaultDeclaration") {
@@ -301,7 +311,12 @@ function build(
         file,
         deps
       )
-      const component = componentFromImport(index, binding, importedName, patterns)
+      const component = componentFromImport(
+        index,
+        binding,
+        importedName,
+        patterns
+      )
       if (component) return component
       if (!binding) {
         // Not cached: the file the name points at may yet be created.
@@ -319,7 +334,13 @@ function build(
         complete = false
         return null
       }
-      const result = lookup(binding.file, binding.name, patterns, visiting, deps)
+      const result = lookup(
+        binding.file,
+        binding.name,
+        patterns,
+        visiting,
+        deps
+      )
       if (!result.complete) complete = false
       return result.target
     }
@@ -423,8 +444,7 @@ export function wrapperTargetOf(
   patterns: RegExp[] = [],
   parsed?: ParsedSfc
 ): WrapperTarget | null {
-  return lookup(file, exportName, patterns, new Set(), undefined, parsed)
-    .target
+  return lookup(file, exportName, patterns, new Set(), undefined, parsed).target
 }
 
 export function clearWrapperCache() {

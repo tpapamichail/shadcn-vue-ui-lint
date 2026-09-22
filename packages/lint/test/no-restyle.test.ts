@@ -67,7 +67,10 @@ describe("no-restyle", () => {
         {
           filename: PAGE,
           options: layout,
-          code: sfc(button, `<Button class="bg-red-500 rounded-full">Go</Button>`),
+          code: sfc(
+            button,
+            `<Button class="bg-red-500 rounded-full">Go</Button>`
+          ),
           errors: [
             { messageId: "appearanceClassWithVariants" },
             { messageId: "appearanceClassWithVariants" },
@@ -236,7 +239,10 @@ describe("no-restyle", () => {
         // Class globs match the base utility at every breakpoint.
         {
           filename: PAGE,
-          code: sfc(card, `<CardTitle class="p-2 md:p-4 hover:!px-3">Hi</CardTitle>`),
+          code: sfc(
+            card,
+            `<CardTitle class="p-2 md:p-4 hover:!px-3">Hi</CardTitle>`
+          ),
           options: [
             { contracts: [{ pattern: "^CardTitle$", allow: ["p-*", "px-*"] }] },
           ],
@@ -413,7 +419,10 @@ describe("contract entries that are both a class and a group", () => {
       valid: [
         {
           filename: PAGE,
-          code: sfc(card, `<CardTitle class="flex flex-1 text-xs">Hi</CardTitle>`),
+          code: sfc(
+            card,
+            `<CardTitle class="flex flex-1 text-xs">Hi</CardTitle>`
+          ),
           options: [
             {
               contracts: [

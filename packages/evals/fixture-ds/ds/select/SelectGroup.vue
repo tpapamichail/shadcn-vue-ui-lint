@@ -7,10 +7,7 @@ const props = defineProps<{
 </script>
 
 <template>
-  <div
-    data-slot="select-group"
-    :class="cn('scroll-my-1 p-1', props.class)"
-  >
+  <div data-slot="select-group" :class="cn('scroll-my-1 p-1', props.class)">
     <slot />
   </div>
 </template>

@@ -1,9 +1,10 @@
 #!/usr/bin/env node
 // Measures agreement between the regex classifier (classifyClass) and the
 // cn-backed classifier (categoryOf(groupOf(token))) over the registry
-// corpus. Tokens come from the recorded corpus JSON plus every className
-// string literal found in the registry sources. This is a measurement
-// script: extraction is regex-based, not an AST walk.
+// corpus. Tokens come from the recorded corpus JSON plus every static
+// class attribute and cn()/cva() string literal in the registry
+// sources. This is a measurement script: extraction is regex-based,
+// not an AST walk.
 //
 // Usage:
 //   npx tsx scripts/classifier-parity.mjs [--corpus <path>] [--dir <path>] [--examples <n>]
@@ -124,7 +125,7 @@ const FIXTURE_CORPUS = path.join(
 // The pinned registry snapshot that fetch-registry.mjs checks out.
 const REGISTRY_DIR = path.join(
   REPO_ROOT,
-  "packages/evals/.registry/ui/apps/v4/registry/new-york-v4"
+  "packages/evals/.registry/shadcn-vue/apps/v4/registry/new-york-v4"
 )
 
 const args = process.argv.slice(2)
@@ -140,10 +141,10 @@ function splitTokens(value) {
   return value.split(/\s+/).filter(Boolean)
 }
 
-function listTsxFiles(dir) {
+function listSourceFiles(dir) {
   return fs
     .readdirSync(dir, { recursive: true, withFileTypes: true })
-    .filter((entry) => entry.isFile() && entry.name.endsWith(".tsx"))
+    .filter((entry) => entry.isFile() && /\.(vue|ts)$/.test(entry.name))
     .map((entry) => path.join(entry.parentPath, entry.name))
 }
 
@@ -191,14 +192,14 @@ function stringLiterals(text) {
   return literals
 }
 
-function classNameLiterals(text) {
+// Every static class attribute value in a chunk of SFC source. Bound
+// `:class` values contribute through the cn()/cva() call extraction.
+function classLiterals(text) {
   const literals = []
-  const pattern =
-    /className=(?:"([^"]*)"|'([^']*)'|\{"([^"]*)"\}|\{'([^']*)'\}|\{`([^`]*)`\})/g
+  const pattern = /(?<![:\w-])class="([^"]*)"/g
   let match
   while ((match = pattern.exec(text))) {
-    const value = match[1] ?? match[2] ?? match[3] ?? match[4] ?? match[5]
-    literals.push(...value.split(/\$\{[^}]*\}/))
+    literals.push(match[1])
   }
   return literals
 }
@@ -208,12 +209,12 @@ const corpusTokens = new Set(
   [...corpus.defaults, ...corpus.callers].flatMap(splitTokens)
 )
 
-const files = listTsxFiles(targetDir)
+const files = listSourceFiles(targetDir)
 const registryTokens = new Set()
 for (const file of files) {
   const text = fs.readFileSync(file, "utf8")
   const literals = [
-    ...classNameLiterals(text),
+    ...classLiterals(text),
     ...callArguments(text, "cn").flatMap(stringLiterals),
     ...callArguments(text, "cva").flatMap(stringLiterals),
   ]

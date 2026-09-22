@@ -5,8 +5,8 @@
 // of the project uses, so a run that reads no .vue file loads nothing
 // new.
 
-import { createRequire } from "node:module"
 import * as fs from "node:fs"
+import { createRequire } from "node:module"
 import * as path from "node:path"
 
 import { child, type Node } from "./ast"
@@ -38,8 +38,9 @@ function typescriptScriptParser(): ScriptParser | null {
     return {
       parse: (code) => ts.parse(code, { jsx: false, range: false, loc: false }),
       parseForESLint: (code, options) =>
-        ts.parseForESLint?.(code, options) ??
-        { ast: ts.parse(code, { jsx: false, range: false, loc: false }) },
+        ts.parseForESLint?.(code, options) ?? {
+          ast: ts.parse(code, { jsx: false, range: false, loc: false }),
+        },
     }
   } catch {
     return null

@@ -15,7 +15,11 @@ const RULES = [
 ]
 const CLASSES = "bg-red-500 rounded-[13px] flex-cols"
 
-function diagnostics(script: string, markup: string, rules: Linter.RulesRecord) {
+function diagnostics(
+  script: string,
+  markup: string,
+  rules: Linter.RulesRecord
+) {
   return new Linter({ cwd: PROJECT })
     .verify(
       sfc(`${button}\n${cn}\n${script}`, markup),
@@ -78,9 +82,9 @@ function expectIndependentRules(
     .flatMap(([rule, value]) => diagnostics(script, markup, { [rule]: value }))
     .sort((a, b) => JSON.stringify(a).localeCompare(JSON.stringify(b)))
   expect(diagnostics(script, markup, rules)).toEqual(independent)
-  expect(diagnostics(script, markup, Object.fromEntries(entries.reverse()))).toEqual(
-    independent
-  )
+  expect(
+    diagnostics(script, markup, Object.fromEntries(entries.reverse()))
+  ).toEqual(independent)
   return independent
 }
 
@@ -127,26 +131,29 @@ describe("class-site diagnostic ownership", () => {
       `<Button :class="classes.root" />`,
       3,
     ],
-  ])("%s preserves individual and combined output", (_name, script, markup, restyles) => {
-    const messages = expectIndependentRules(
-      script as string,
-      markup as string,
-      rulesWith()
-    )
-    for (const rule of RULES.slice(0, 3)) {
-      expect(
-        messages.filter((message) => message.ruleId === `shadcn-vue/${rule}`)
-      ).toHaveLength(1)
-    }
-    expect(
-      messages.filter((message) => message.ruleId === "shadcn-vue/no-restyle")
-    ).toHaveLength(restyles as number)
-    expect(
-      messages.filter(
-        (message) => message.ruleId === "shadcn-vue/require-static-classes"
+  ])(
+    "%s preserves individual and combined output",
+    (_name, script, markup, restyles) => {
+      const messages = expectIndependentRules(
+        script as string,
+        markup as string,
+        rulesWith()
       )
-    ).toHaveLength(0)
-  })
+      for (const rule of RULES.slice(0, 3)) {
+        expect(
+          messages.filter((message) => message.ruleId === `shadcn-vue/${rule}`)
+        ).toHaveLength(1)
+      }
+      expect(
+        messages.filter((message) => message.ruleId === "shadcn-vue/no-restyle")
+      ).toHaveLength(restyles as number)
+      expect(
+        messages.filter(
+          (message) => message.ruleId === "shadcn-vue/require-static-classes"
+        )
+      ).toHaveLength(0)
+    }
+  )
 
   test("keeps source locations, message text and suggestion replacements", () => {
     expect(
@@ -332,7 +339,10 @@ describe("class-site diagnostic ownership", () => {
           { mergeFunctions: ["merge"] },
         ],
         "shadcn-vue/no-raw-colors": "error",
-        "shadcn-vue/no-unknown-classes": ["error", { mergeFunctions: ["merge"] }],
+        "shadcn-vue/no-unknown-classes": [
+          "error",
+          { mergeFunctions: ["merge"] },
+        ],
         "shadcn-vue/no-restyle": [
           "error",
           { mergeFunctions: ["merge"], allow: ["layout"] },
@@ -389,9 +399,12 @@ describe("class-site diagnostic ownership", () => {
       `const { class: className } = defineProps<{ class?: string }>()`,
       `<Button :class="\`prefix-\${className}\`" />`,
     ],
-  ])("forwarded and unresolved values preserve combined output: %s", (script, markup) => {
-    expectIndependentRules(script as string, markup as string, rulesWith())
-  })
+  ])(
+    "forwarded and unresolved values preserve combined output: %s",
+    (script, markup) => {
+      expectIndependentRules(script as string, markup as string, rulesWith())
+    }
+  )
 })
 
 describe("a standalone helper call reaches every rule", () => {
@@ -400,11 +413,20 @@ describe("a standalone helper call reaches every rule", () => {
       `import { cva } from "class-variance-authority"\nconst styles = cva("bg-red-500 rounded-[13px]")`,
       `<div :class="styles()" />`,
     ],
-    [`${cn}\nconst styles = cn("bg-red-500 rounded-[13px]")`, `<div :class="styles" />`],
+    [
+      `${cn}\nconst styles = cn("bg-red-500 rounded-[13px]")`,
+      `<div :class="styles" />`,
+    ],
   ]
   const orders: Linter.RulesRecord[] = [
-    { "shadcn-vue/no-raw-colors": "error", "shadcn-vue/no-arbitrary-values": "error" },
-    { "shadcn-vue/no-arbitrary-values": "error", "shadcn-vue/no-raw-colors": "error" },
+    {
+      "shadcn-vue/no-raw-colors": "error",
+      "shadcn-vue/no-arbitrary-values": "error",
+    },
+    {
+      "shadcn-vue/no-arbitrary-values": "error",
+      "shadcn-vue/no-raw-colors": "error",
+    },
   ]
   test("both rules report in both registration orders", () => {
     for (const [script, markup] of cases) {

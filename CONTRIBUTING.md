@@ -32,10 +32,12 @@ See [Evals](./docs/evals.md) for methodology, results, and commands.
 
 ## The registry corpus
 
-The corpus is a fixed snapshot of the shadcn/ui registry, used to test
+The corpus is a fixed snapshot of the shadcn-vue registry, used to test
 the rules against real code. `packages/evals/scripts/registry.json`
 pins its commit. The scripts fetch a sparse clone into the ignored
-`.registry/` directory, including in CI.
+`.registry/` directory, including in CI. The docs app ships no
+`components.json` (it is a Nuxt site), so the fetch also writes the
+manifest the linter's project discovery reads.
 
 To update the snapshot, change the pinned ref, run
 `pnpm corpus:check --update`, and include the ref and baseline in the

@@ -6,12 +6,7 @@ module.exports = {
   tabWidth: 2,
   trailingComma: "es5",
   printWidth: 80,
-  importOrder: [
-    "^(react/(.*)$)|^(react$)",
-    "<THIRD_PARTY_MODULES>",
-    "",
-    "^[./]",
-  ],
-  importOrderParserPlugins: ["typescript", "jsx", "decorators-legacy"],
+  importOrder: ["<THIRD_PARTY_MODULES>", "", "^[./]"],
+  importOrderParserPlugins: ["typescript", "decorators-legacy"],
   plugins: ["@ianvs/prettier-plugin-sort-imports"],
 }

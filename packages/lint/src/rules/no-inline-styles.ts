@@ -468,11 +468,7 @@ export const noInlineStyles = {
         if (argument) return
         // `v-bind="{ style: ... }"` and `v-bind="$attrs"`: the style
         // property is judged like the attribute.
-        const object = resolveObject(
-          node.value?.expression,
-          reader,
-          new Set()
-        )
+        const object = resolveObject(node.value?.expression, reader, new Set())
         if (!object) return
         const { value, uncertain } = resolveProperty(
           object,

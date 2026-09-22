@@ -5,8 +5,8 @@ import * as fs from "node:fs"
 import * as path from "node:path"
 import { pathToFileURL } from "node:url"
 import tsParser from "@typescript-eslint/parser"
-import vueParser from "vue-eslint-parser"
 import { ESLint } from "eslint"
+import vueParser from "vue-eslint-parser"
 
 import { readComponent } from "./component.mjs"
 import { manifestFor } from "./fixture.mjs"
@@ -24,8 +24,9 @@ const { plugin } = await import(
 const uiPolicy = { rules: UI_RULES }
 
 // The exact SFC setup the linter is tested with: vue-eslint-parser for
-// the template, @typescript-eslint/parser for the script blocks.
-function sfcLanguageOptions() {
+// the template, @typescript-eslint/parser for the script blocks. The
+// corpus and bench scripts measure the same setup.
+export function sfcLanguageOptions() {
   return {
     parser: vueParser,
     parserOptions: {

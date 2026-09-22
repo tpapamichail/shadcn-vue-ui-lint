@@ -143,7 +143,10 @@ import policy from "./design-system.lint.json" with { type: "json" }
 export default [
   {
     files: ["**/*.vue"],
-    languageOptions: { parser: vueParser, parserOptions: { parser: tsParser, sourceType: "module" } },
+    languageOptions: {
+      parser: vueParser,
+      parserOptions: { parser: tsParser, sourceType: "module" },
+    },
     plugins: { "shadcn-vue": shadcnVue },
     rules: policy.rules,
   },

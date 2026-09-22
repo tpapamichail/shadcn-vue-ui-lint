@@ -88,10 +88,7 @@ describe("allow with contract normalization", () => {
 
 describe("scanAllStrings", () => {
   test("bare string literals are checked", () => {
-    const code = sfc(
-      `const tone = "bg-pink-500"`,
-      `<div :data-tone="tone" />`
-    )
+    const code = sfc(`const tone = "bg-pink-500"`, `<div :data-tone="tone" />`)
     tester.run("no-raw-colors", noRawColors as any, {
       valid: [
         {
@@ -143,9 +140,7 @@ describe("SVG presentation attributes", () => {
       invalid: [
         {
           filename: PAGE,
-          code: template(
-            `<svg><path fill="#ff00aa" :stroke="'red'" /></svg>`
-          ),
+          code: template(`<svg><path fill="#ff00aa" :stroke="'red'" /></svg>`),
           errors: [
             {
               messageId: "rawColorAttribute",
