@@ -1,0 +1,3 @@
+# Keep LF on every platform; Prettier checks for it and a Windows
+# checkout would otherwise rewrite every text file to CRLF.
+* text=auto eol=lf

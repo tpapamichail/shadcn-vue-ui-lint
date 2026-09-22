@@ -1,0 +1,34 @@
+{
+  "name": "lint-workspace",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@10.28.2",
+  "scripts": {
+    "build": "pnpm --filter @tpapamichail/shadcn-vue-lint run build",
+    "test": "pnpm --filter @tpapamichail/shadcn-vue-lint run build && pnpm --filter @tpapamichail/shadcn-vue-lint run test",
+    "typecheck": "pnpm --filter @tpapamichail/shadcn-vue-lint exec tsc --noEmit",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format:write": "prettier --write . --cache",
+    "format:check": "prettier --check . --cache",
+    "corpus": "pnpm --filter @tpapamichail/shadcn-vue-lint run build && pnpm --filter evals run corpus",
+    "corpus:check": "pnpm --filter @tpapamichail/shadcn-vue-lint run build && pnpm --filter evals run corpus:check",
+    "evals": "pnpm --filter @tpapamichail/shadcn-vue-lint run build && pnpm --filter evals run run",
+    "changeset": "changeset",
+    "release": "pnpm run typecheck && pnpm run test && pnpm run corpus:check && changeset publish"
+  },
+  "engines": {
+    "node": ">=20.19"
+  },
+  "devDependencies": {
+    "@changesets/changelog-github": "^0.5.1",
+    "@changesets/cli": "^3.0.1",
+    "@eslint/js": "^9.33.0",
+    "@ianvs/prettier-plugin-sort-imports": "^4.7.1",
+    "eslint": "^9.33.0",
+    "eslint-config-prettier": "^10.1.8",
+    "globals": "^16.3.0",
+    "prettier": "^3.6.2",
+    "typescript-eslint": "^8.40.0"
+  }
+}

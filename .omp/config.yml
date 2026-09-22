@@ -1,0 +1,14 @@
+modelRoleStorage: project
+modelRoles:
+  plan: zai/glm-5.3:high
+  default: zai/glm-5.3-flash:high
+  smol: zai/glm-5.3-flash:low
+  vision: zai/glm-5.3-flash:high
+  designer: openai-codex/gpt-5.6-luna:xhigh
+  commit: openrouter/openrouter/free:auto
+  tiny: openrouter/openrouter/free:auto
+  task: zai/glm-5.3-flash:high
+  advisor: openai-codex/gpt-5.6-sol:xhigh
+  slow: zai/glm-5.3:high
+  web: web/firecrawl
+  memory: openrouter/openrouter/free

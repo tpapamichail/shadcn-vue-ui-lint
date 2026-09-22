@@ -1,0 +1,21 @@
+# build output and deps
+node_modules/
+dist/
+pnpm-lock.yaml
+
+# fetched registry and eval runs
+.registry/
+packages/evals/results/
+
+# real component files vendored as test and eval fixtures
+packages/lint/test/fixtures/
+packages/evals/fixture/
+
+# written by changesets during release PRs, without prettier
+CHANGELOG.md
+
+# session/tooling state and private planning
+.claude/
+
+# side builds
+dist-next/

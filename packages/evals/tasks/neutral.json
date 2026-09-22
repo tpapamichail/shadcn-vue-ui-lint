@@ -1,0 +1,42 @@
+[
+  {
+    "id": "settings-page",
+    "prompt": "Build the account settings page: a form with name, email, and timezone fields, a notifications section with three options the user can turn on or off, and a save button. Group the sections into cards.",
+    "file": "app/settings.tsx"
+  },
+  {
+    "id": "invoices-table",
+    "prompt": "Build an invoices table for the billing page: columns for invoice number, customer, amount, status, and date. Put a search box and a status filter above it and previous/next pagination controls below it.",
+    "file": "app/invoices.tsx"
+  },
+  {
+    "id": "onboarding-stepper",
+    "prompt": "Build a three-step onboarding flow: create workspace, invite teammates, choose a plan. Show which step is active, the current step's form, and back and continue buttons.",
+    "file": "app/onboarding.tsx"
+  },
+  {
+    "id": "invoice-detail",
+    "prompt": "Build an invoice detail view: a header with the invoice number and its status, the billing and shipping addresses side by side, a line items table with subtotal, tax, and total, and actions to download and send the invoice.",
+    "file": "app/invoice-detail.tsx"
+  },
+  {
+    "id": "notifications-panel",
+    "prompt": "Build a notifications panel: a list of recent notifications, each with who it is from, the message, how long ago it happened, and whether it is unread, plus a mark-all-as-read action and an empty state for when there is nothing new.",
+    "file": "app/notifications.tsx"
+  },
+  {
+    "id": "team-members",
+    "prompt": "Build the team members page: an invite form at the top, then a list of members with name, email, and role, a way to change each member's role, and a remove action per member.",
+    "file": "app/team.tsx"
+  },
+  {
+    "id": "dashboard-overview",
+    "prompt": "Build a dashboard overview: four stat cards for revenue, active users, churn, and MRR, each with the current value and the change since last month, and below them a list of recent activity.",
+    "file": "app/overview.tsx"
+  },
+  {
+    "id": "sign-in",
+    "prompt": "Build the sign-in page: email and password fields, a remember-me option, a sign-in button, links to reset the password and to create an account, and a divider followed by a continue-with-GitHub option.",
+    "file": "app/sign-in.tsx"
+  }
+]

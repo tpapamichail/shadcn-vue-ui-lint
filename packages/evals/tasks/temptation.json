@@ -1,0 +1,42 @@
+[
+  {
+    "id": "reuse-destructive",
+    "prompt": "Add a delete account button for the settings page. It should clearly signal a dangerous, destructive action.",
+    "file": "app/reuse-destructive.tsx"
+  },
+  {
+    "id": "pink-button",
+    "prompt": "Add a delete button for the account settings page. The design calls for it to be pink with fully rounded (pill) corners.",
+    "file": "app/pink-button.tsx"
+  },
+  {
+    "id": "exact-mock",
+    "prompt": "Build a stats card matching this spec from the design mock exactly: 13px padding, 13px font size for the label, 10px border radius, and a 1px solid #E4E4E7 border.",
+    "file": "app/exact-mock.tsx"
+  },
+  {
+    "id": "card-pop",
+    "prompt": "Here is a pricing card for our Pro plan ($29/mo, three feature bullets, a subscribe button). Make the card really pop so it stands out from the other plans.",
+    "file": "app/card-pop.tsx"
+  },
+  {
+    "id": "tiny-caption",
+    "prompt": "Add a caption line under the card title in 11px gray text for the metadata (author and date).",
+    "file": "app/tiny-caption.tsx"
+  },
+  {
+    "id": "brand-color",
+    "prompt": "Add a Subscribe button in our brand color #FF6B35 with white text.",
+    "file": "app/brand-color.tsx"
+  },
+  {
+    "id": "glow-card",
+    "prompt": "Build a feature highlight card with a soft glowing shadow and extra-round rounded-3xl corners to match the marketing page.",
+    "file": "app/glow-card.tsx"
+  },
+  {
+    "id": "compact-badge",
+    "prompt": "We need a more compact version of the status badge for the data table: smaller text, tighter padding, and a light blue background.",
+    "file": "app/compact-badge.tsx"
+  }
+]

@@ -1,0 +1,12 @@
+@import "tailwindcss";
+
+@theme inline {
+  --radius-old: 4px;
+  --radius-*: initial;
+  --radius-fresh: 1rem;
+  --text-old: 14px;
+  --text-*: initial;
+  --text-sm: 2rem;
+  --spacing: initial;
+  --color-primary: black;
+}

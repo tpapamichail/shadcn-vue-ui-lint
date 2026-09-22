@@ -1,0 +1,5 @@
+{
+  "intro": "a Tailwind CSS project with its own design system in ds/ (not a shadcn project: no CLI, no components.json)",
+  "componentsDir": "ds",
+  "importPattern": "(^|/)ds(/|$)"
+}

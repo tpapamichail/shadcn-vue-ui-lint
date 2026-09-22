@@ -1,0 +1,11 @@
+{
+  "repo": "https://github.com/shadcn-ui/ui.git",
+  "ref": "63c1308d112b6b1205d86244a156cca1abef5087",
+  "path": "apps/v4/registry/new-york-v4",
+  "include": [
+    "apps/v4/registry/new-york-v4/",
+    "apps/v4/components.json",
+    "apps/v4/app/globals.css",
+    "apps/v4/app/legacy-themes.css"
+  ]
+}

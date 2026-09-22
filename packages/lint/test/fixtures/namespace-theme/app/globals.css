@@ -1,0 +1,36 @@
+@import "tailwindcss";
+
+/* Namespaces that share a prefix with a color utility: text-stat-label is
+   a font-size, shadow-card-glow a box-shadow, bg-stripes a background
+   image. None of them is a color. */
+@theme inline {
+  --color-primary: oklch(0.205 0 0);
+  --text-stat-label: 13px;
+  --shadow-card-glow: 0 0 24px oklch(0.205 0 0);
+  --drop-shadow-lift: 0 4px 8px oklch(0.205 0 0);
+  --background-image-stripes: linear-gradient(45deg, #000 50%, #fff 50%);
+}
+
+@utility text-callout {
+  font-size: 15px;
+  line-height: 1.4;
+}
+
+/* A plain selector is not vocabulary: the color behind it is raw. */
+.text-legacy {
+  color: #f00;
+}
+
+/* Animations the project declares: a theme value, and the @utility shape
+   tw-animate-css uses for animate-in. */
+@theme inline {
+  --animate-shimmer: shimmer 2s linear infinite;
+}
+
+@utility animate-in {
+  animation: enter 150ms ease;
+}
+
+@utility animate-duration-* {
+  animation-duration: calc(--value(integer) * 1ms);
+}

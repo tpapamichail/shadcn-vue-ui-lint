@@ -1,0 +1,4 @@
+{
+  "aliases": { "components": "@/components", "ui": "@/components/ui" },
+  "tailwind": { "css": "src/theme.css" }
+}

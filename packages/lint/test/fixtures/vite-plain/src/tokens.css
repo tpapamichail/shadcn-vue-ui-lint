@@ -1,0 +1,4 @@
+/* Tokens without a Tailwind import: not the entry stylesheet. */
+@theme {
+  --color-brand: oklch(0.6 0.2 30);
+}
