@@ -35,7 +35,7 @@ export default tseslint.config(
     },
   },
   {
-    // Rules walk ESTree nodes from two runtimes (ESLint and Oxlint) whose
+    // Rules walk ESTree nodes from ESLint's vue-eslint-parser whose
     // types differ; the AST is handled untyped on purpose.
     files: ["packages/lint/src/**", "packages/lint/test/**"],
     rules: {

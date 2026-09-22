@@ -8,6 +8,10 @@ dated run whose id is listed at the [end of this page](#run-ids). These
 are measurements of specific runs, not promises for every model or
 project.
 
+These numbers are historical: they were measured on the React original,
+`@shadcn/lint`, before this port targeted Vue SFCs. The rules and the
+feedback they produce are unchanged.
+
 ## What the evals show
 
 **Without the linter, every model drifts.** Given eight prompts that ask

@@ -6,6 +6,15 @@
   "author": {
     "name": "tpapamichail"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tpapamichail/shadcn-vue-ui-lint.git",
+    "directory": "packages/lint"
+  },
+  "homepage": "https://github.com/tpapamichail/shadcn-vue-ui-lint#readme",
+  "bugs": {
+    "url": "https://github.com/tpapamichail/shadcn-vue-ui-lint/issues"
+  },
   "type": "module",
   "publishConfig": {
     "access": "public"

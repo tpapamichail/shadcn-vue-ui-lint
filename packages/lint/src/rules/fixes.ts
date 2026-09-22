@@ -20,7 +20,6 @@ export function replaceInLiteral(
   const inner = raw.slice(1, -1)
   // Escapes and line continuations move classes between source and value;
   // a template literal decodes entities without moving anything.
-  // A template attribute decodes entities without moving anything.
   const decoded = node.parent?.type === "VAttribute"
   if (!decoded && inner !== node.value) return null
   const replaced = replaceClass(inner, token, replacement)

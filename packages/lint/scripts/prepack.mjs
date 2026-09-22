@@ -6,7 +6,7 @@ import * as fs from "node:fs"
 import * as path from "node:path"
 import { fileURLToPath } from "node:url"
 
-const RAW = "https://raw.githubusercontent.com/shadcn-ui/lint/main/"
+const RAW = "https://raw.githubusercontent.com/tpapamichail/shadcn-vue-ui-lint/main/"
 
 const PKG_DIR = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..")
 const ROOT = path.resolve(PKG_DIR, "../..")

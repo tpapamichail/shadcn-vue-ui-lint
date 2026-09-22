@@ -5,7 +5,7 @@ export const entriesSchema = { type: "array", items: { type: "string" } }
 
 const message = { type: "string", maxLength: 500 }
 
-// Mirrors settings.shadcn, where these are written once for every rule.
+// Mirrors settings["shadcn-vue"], where these are written once for every rule.
 export const recognitionSchema = {
   componentImports: entriesSchema,
   ignoreImports: entriesSchema,
