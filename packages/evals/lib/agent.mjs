@@ -71,7 +71,7 @@ export function generationPrompt(task, manifest = DEFAULT_MANIFEST) {
 
 ${task.prompt}
 
-Write the component to ${task.file}. Use the existing ui components where possible. Do not install dependencies or run any commands. Write valid, complete TSX.`
+Write the component to ${task.file}. Use the existing ui components where possible. Do not install dependencies or run any commands. Write a valid, complete Vue single-file component.`
 }
 
 // Condition C's prompt describes the rules and asks for a fix. It does
@@ -79,18 +79,18 @@ Write the component to ${task.file}. Use the existing ui components where possib
 // forbidWorkarounds is set; that sentence reproduces the runs recorded
 // before 2026-09-04.
 const RULES = `The rules:
-- shadcn-vue/no-restyle: className passed to a ui component may only adjust layout (margin, width, grid/flex placement, visibility). Appearance (colors, typography, spacing, shape, effects, motion) must come from the component's own variants. Use an existing variant if one matches the intent; add a new variant to the component's file in components/ui only if the design explicitly calls for a treatment none of the existing variants provides.
+- shadcn-vue/no-restyle: class passed to a ui component may only adjust layout (margin, width, grid/flex placement, visibility). Appearance (colors, typography, spacing, shape, effects, motion) must come from the component's own variants. Use an existing variant if one matches the intent; add a new variant to the component's file in components/ui only if the design explicitly calls for a treatment none of the existing variants provides.
 - shadcn-vue/no-raw-colors: color utilities must use the theme's declared tokens (bg-primary, text-muted-foreground), never the raw Tailwind palette (bg-pink-500) or an undeclared name. To add a color, declare it in app/globals.css (a --color-<name> entry in the @theme block, backed by a :root variable), then use bg-<name>.
 - shadcn-vue/no-arbitrary-values: arbitrary values on appearance utilities (p-[13px], text-[11px], border-[#E4E4E7]) are banned on any element. Use theme tokens and scale values (p-3, text-xs, border-border); for sizes and spacing, use the nearest scale value.
 - shadcn-vue/no-inline-styles: no style attribute except CSS custom properties, and a custom property must not hardcode a color.
-- shadcn-vue/require-static-classes: className on ui components must be statically analyzable strings.`
+- shadcn-vue/require-static-classes: class on ui components must be statically analyzable strings.`
 
 export function feedbackPrompt(
   task,
   findings,
   { forbidWorkarounds = false, manifest = DEFAULT_MANIFEST }
 ) {
-  return `You previously wrote ${task.file} in this shadcn/ui project for this task:
+  return `You previously wrote ${task.file} in ${manifest.intro} for this task:
 
 ## Task
 
@@ -113,7 +113,7 @@ export function reviewPrompt(
   task,
   { forbidWorkarounds = false, manifest = DEFAULT_MANIFEST }
 ) {
-  return `You previously wrote ${task.file} in this shadcn/ui project for this task:
+  return `You previously wrote ${task.file} in ${manifest.intro} for this task:
 
 ## Task
 

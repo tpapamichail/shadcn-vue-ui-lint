@@ -1,6 +1,6 @@
 {
-  "$schema": "https://ui.shadcn.com/schema.json",
-  "style": "radix-nova",
+  "$schema": "https://shadcn-vue.com/schema.json",
+  "style": "new-york",
   "tailwind": {
     "config": "",
     "css": "app/globals.css",

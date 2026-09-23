@@ -7,7 +7,7 @@ import * as fs from "node:fs"
 import * as path from "node:path"
 
 export const DEFAULT_MANIFEST = {
-  intro: "a shadcn/ui project",
+  intro: "a shadcn-vue project",
   componentsDir: "components/ui",
   // A componentImports entry for the rules; null means the
   // plugin's own discovery (components.json or the ui directory).
