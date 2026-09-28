@@ -1,5 +1,17 @@
 # @hosterai/shadcn-vue-lint
 
+## 0.2.0
+
+### Minor Changes
+
+- [`431abc7`](https://github.com/tpapamichail/shadcn-vue-ui-lint/commit/431abc7ab96724f4ec7f32d0cb0ed4b7f3022ec8) Thanks [@tpapamichail](https://github.com/tpapamichail)! - Recognize auto-imported components registered under a name prefix. `settings["shadcn-vue"].componentPrefix: "Ui"` (or the same option on a rule) makes `<UiButton>` the project's own `Button` and `<ui-card-title>` its `CardTitle`, including inside a project wrapper on disk; without it, a framework that auto-imports (Nuxt, shadcn-nuxt) leaves the whole design system invisible, because no import names a component. Only a name the project's own UI directory owns answers, so `<UiNotAComponent>` stays unrecognized, and findings, contracts, and variant hints speak of the unprefixed name.
+
+### Patch Changes
+
+- [`5f7587e`](https://github.com/tpapamichail/shadcn-vue-ui-lint/commit/5f7587ed1d06aaee1bd3cd2229bdffbf25a3d037) Thanks [@tpapamichail](https://github.com/tpapamichail)! - Port framework-agnostic hardening from upstream `@shadcn/lint` 0.2.0: classes declared in a component's own `<style>` block no longer report as unknown; barrel-defined variants (`buttonVariants` in `index.ts` beside `Button.vue`) are found; `index.js` barrels are read for SFC directories; components re-exported through `componentImports` are named by their SFC filename; `.vue` modules parse only their script blocks and strip comments in export lists; a warning fires when a `.vue` file is linted without `vue-eslint-parser`.
+
+- [`03ac295`](https://github.com/tpapamichail/shadcn-vue-ui-lint/commit/03ac295b1e4a8ec6bc9b48e80b2a9dc8ed731916) Thanks [@tpapamichail](https://github.com/tpapamichail)! - The templates-unread warning now links to this repository's setup docs instead of the React original's.
+
 ## 0.1.0
 
 - Initial release — Vue port of `@shadcn/lint`.
