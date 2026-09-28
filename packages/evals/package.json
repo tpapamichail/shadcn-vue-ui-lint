@@ -1,7 +1,7 @@
 {
   "name": "evals",
   "private": true,
-  "description": "Measurement for @tpapamichail/shadcn-vue-lint: agent evals (paired before/after runs, redirect classification, fidelity judge), the registry corpus scan and ratchet, classifier parity, and the red-team verifier. Never published.",
+  "description": "Measurement for @hosterai/shadcn-vue-lint: agent evals (paired before/after runs, redirect classification, fidelity judge), the registry corpus scan and ratchet, classifier parity, and the red-team verifier. Never published.",
   "type": "module",
   "scripts": {
     "run": "node run.mjs",
@@ -17,7 +17,7 @@
     "bench:large": "node scripts/bench-large.mjs"
   },
   "dependencies": {
-    "@tpapamichail/shadcn-vue-lint": "workspace:*"
+    "@hosterai/shadcn-vue-lint": "workspace:*"
   },
   "devDependencies": {
     "@tailwindcss/cli": "^4.3.3",

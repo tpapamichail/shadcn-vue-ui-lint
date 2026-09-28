@@ -27,7 +27,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const { plugin } = await import(
   process.env.SHADCN_LINT_PLUGIN
     ? pathToFileURL(path.resolve(process.env.SHADCN_LINT_PLUGIN)).href
-    : "@tpapamichail/shadcn-vue-lint"
+    : "@hosterai/shadcn-vue-lint"
 )
 const BASELINE_PATH = path.join(__dirname, "corpus-baseline.json")
 const uiPolicy = { rules: UI_RULES }

@@ -8,7 +8,7 @@ let sink: (message: string) => void = (message) => console.warn(message)
 export function warnOnce(key: string, message: string) {
   if (seen.has(key)) return
   seen.add(key)
-  sink(`[@tpapamichail/shadcn-vue-lint] ${message}`)
+  sink(`[@hosterai/shadcn-vue-lint] ${message}`)
 }
 
 export function setWarningSink(fn: (message: string) => void) {

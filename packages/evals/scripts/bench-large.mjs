@@ -11,7 +11,7 @@ import { rulesAt } from "../lib/policy.mjs"
 const { plugin } = await import(
   process.env.SHADCN_LINT_PLUGIN
     ? pathToFileURL(path.resolve(process.env.SHADCN_LINT_PLUGIN)).href
-    : "@tpapamichail/shadcn-vue-lint"
+    : "@hosterai/shadcn-vue-lint"
 )
 
 function count(name, fallback) {

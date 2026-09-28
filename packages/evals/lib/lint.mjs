@@ -1,5 +1,5 @@
 // Shared lint runner for the eval harness. Lints the app/ files of a
-// work dir with every @tpapamichail/shadcn-vue-lint rule at error and returns findings.
+// work dir with every @hosterai/shadcn-vue-lint rule at error and returns findings.
 
 import * as fs from "node:fs"
 import * as path from "node:path"
@@ -17,7 +17,7 @@ import { rulesFor, UI_RULES } from "./policy.mjs"
 const { plugin } = await import(
   process.env.SHADCN_LINT_PLUGIN
     ? pathToFileURL(path.resolve(process.env.SHADCN_LINT_PLUGIN)).href
-    : "@tpapamichail/shadcn-vue-lint"
+    : "@hosterai/shadcn-vue-lint"
 )
 
 // The documented configuration, from lib/policy.mjs.

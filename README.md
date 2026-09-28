@@ -1,8 +1,8 @@
-# @tpapamichail/shadcn-vue-lint
+# @hosterai/shadcn-vue-lint
 
 **Write design system rules that agents can verify.**
 
-`@tpapamichail/shadcn-vue-lint` is an [agent-first linter](#built-for-agents) for Tailwind design systems in Vue.
+`@hosterai/shadcn-vue-lint` is an [agent-first linter](#built-for-agents) for Tailwind design systems in Vue.
 
 It is a Vue port of [`@shadcn/lint`](https://github.com/shadcn-ui/lint), the same linter for React: the same rules, options, and agent-facing messages, retargeted from JSX to Vue single-file components.
 
@@ -10,14 +10,15 @@ You define what’s allowed. When an agent breaks a rule, the error explains wha
 
 **Works with your existing design system. No rewrite required.**
 
-`@tpapamichail/shadcn-vue-lint` works with Tailwind v4 projects (**shadcn-vue not required**). Available for **ESLint**, with `vue-eslint-parser`.
+`@hosterai/shadcn-vue-lint` works with Tailwind v4 projects (**shadcn-vue not required**). Available for **ESLint**, with `vue-eslint-parser`.
 
 ## Table of contents
 
 - [Quickstart](#quickstart)
-- [TypeScript vs @tpapamichail/shadcn-vue-lint](#typescript-vs-tpapamichailshadcn-vue-lint)
+- [TypeScript vs @hosterai/shadcn-vue-lint](#typescript-vs-hosterai-shadcn-vue-lint)
 - [Built for agents](#built-for-agents)
 - [Get started](#get-started)
+- [Nuxt setup](#nuxt-setup)
 - [Links in Vue and Nuxt](docs/link.md)
 - [Rules](#rules)
 - [Configuration](#settings)
@@ -28,7 +29,7 @@ Give your coding agent this prompt:
 
 ```text
 Read https://github.com/tpapamichail/shadcn-vue-ui-lint/blob/master/SETUP.md
-and set up @tpapamichail/shadcn-vue-lint in this project.
+and set up @hosterai/shadcn-vue-lint in this project.
 ```
 
 Once installed, [choose your rules](#rules) and configure what’s allowed
@@ -36,7 +37,7 @@ in your design system.
 
 Prefer to configure it yourself? See [Get started](#get-started).
 
-## TypeScript vs @tpapamichail/shadcn-vue-lint
+## TypeScript vs @hosterai/shadcn-vue-lint
 
 Take a Button that allows margin and width, but controls its own padding.
 You can enforce that with types by typing its `style` prop as
@@ -56,7 +57,7 @@ TS2353: Object literal may only specify known properties, and 'padding' does not
 The rule works. But this error only tells the agent that padding is not
 allowed. It doesn’t tell it how to size the Button.
 
-With `@tpapamichail/shadcn-vue-lint`, the same rule comes with **guidance from your design
+With `@hosterai/shadcn-vue-lint`, the same rule comes with **guidance from your design
 system**:
 
 ```vue
@@ -74,7 +75,7 @@ Add a size in components/ui/button/Button.vue only if the design explicitly call
 ### You decide what can change
 
 Expressing these policies in TypeScript can take complex types. With
-`@tpapamichail/shadcn-vue-lint`, you configure them without changing your component API.
+`@hosterai/shadcn-vue-lint`, you configure them without changing your component API.
 
 Here are some examples.
 
@@ -161,12 +162,12 @@ theme’s spacing scale.
 </template>
 ```
 
-Both approaches enforce the rule. With `@tpapamichail/shadcn-vue-lint`, the agent also sees
+Both approaches enforce the rule. With `@hosterai/shadcn-vue-lint`, the agent also sees
 how to fix the code using what’s already in your design system.
 
 ## Built for agents
 
-We built `@tpapamichail/shadcn-vue-lint` for agents that write UI. The errors tell them
+We built `@hosterai/shadcn-vue-lint` for agents that write UI. The errors tell them
 what broke, what to use instead, and where to find it. Suggestions come from your components, variants, and theme.
 
 You can add
@@ -316,14 +317,14 @@ Requires ESLint 9.30 or later. Vue files need `vue-eslint-parser`, with
 the TypeScript parser for their script blocks.
 
 ```bash
-npm install -D @tpapamichail/shadcn-vue-lint eslint vue-eslint-parser @typescript-eslint/parser
+npm install -D @hosterai/shadcn-vue-lint eslint vue-eslint-parser @typescript-eslint/parser
 ```
 
 Create `eslint.config.mjs`. If your framework already configures ESLint,
 keep its parser setup and add the plugin and rule.
 
 ```js
-import { plugin as shadcnVue } from "@tpapamichail/shadcn-vue-lint"
+import { plugin as shadcnVue } from "@hosterai/shadcn-vue-lint"
 import tsParser from "@typescript-eslint/parser"
 import vueParser from "vue-eslint-parser"
 
@@ -358,6 +359,79 @@ Add `eslint .` as the `lint` script in `package.json`. Then put this in
 After making changes, run `npm run lint` and fix all errors.
 ```
 
+## Nuxt setup
+
+Use the Nuxt ESLint module's existing flat config; do not replace its
+Vue parser with a separate ESLint config. Requires Node.js 20.19+,
+ESLint 9.30+, and Tailwind v4.
+
+If the project does not already use `@nuxt/eslint`, add it first:
+
+```bash
+npx nuxi module add eslint
+```
+
+Install the linter in the Nuxt app (npm example):
+
+```bash
+npm install -D @hosterai/shadcn-vue-lint eslint@^9.30.0
+```
+
+In your existing `eslint.config.mjs`, append a config to Nuxt's
+`withNuxt(...)`. Keep any other configs, rules, and ignores you already
+have:
+
+```js
+import { plugin as shadcnVue } from "@hosterai/shadcn-vue-lint"
+
+import withNuxt from "./.nuxt/eslint.config.mjs"
+
+export default withNuxt({
+  files: ["**/*.vue"],
+  plugins: { "shadcn-vue": shadcnVue },
+  settings: { "shadcn-vue": { componentPrefix: "Ui" } },
+  rules: {
+    "shadcn-vue/no-restyle": ["error", { allow: ["layout"] }],
+  },
+})
+```
+
+The `componentPrefix` above is for shadcn-nuxt setups that register
+`Button` as the auto-imported `<UiButton>` (`shadcn.prefix: "Ui"`).
+Use your project's actual prefix, or omit the setting if components
+are not prefixed. `components.json` should point `aliases.ui` to the
+UI directory; the rule needs that directory to recognize auto-imported
+components and suggest their variants.
+
+Nuxt 4 projects with UI files under `app/components/ui` often have a
+root `tsconfig.json` containing `references` to `.nuxt` configs rather
+than `paths`. If `components.json` uses `"ui": "@/components/ui"`,
+add these paths to the **existing** root `tsconfig.json` without
+removing its `files` or `references`:
+
+```jsonc
+"compilerOptions": {
+  "paths": {
+    "@/*": ["./app/*"],
+    "~/*": ["./app/*"]
+  }
+}
+```
+
+This maps `@/components/ui` to `app/components/ui`. For a different
+directory, use the matching paths; projects with a resolvable alias
+need no extra mapping. Run `npm exec -- nuxt prepare` if Nuxt has not
+generated `.nuxt/eslint.config.mjs`, then run `npx eslint .` (or the
+project's `npm run lint`). To confirm the rule is active, temporarily
+put `class="p-4"` on an existing `<UiButton>` and lint that `.vue`
+file: `shadcn-vue/no-restyle` should report the override. Remove the
+temporary class afterward.
+
+In Zed, open the Nuxt project root with its Vue extension installed
+and restart the ESLint language server after changing the config.
+`eslint --fix` only fixes rules that provide a safe fix; `no-restyle`
+requires choosing the appropriate component variant or contract.
+
 ## Rules
 
 We developed these rules by studying production design systems and testing
@@ -380,7 +454,7 @@ See [rule options](https://github.com/tpapamichail/shadcn-vue-ui-lint/blob/maste
 Use `settings["shadcn-vue"]` to configure component imports, class
 functions, and guidance shared across rules.
 
-**You don’t need shadcn-vue to use `@tpapamichail/shadcn-vue-lint`. It works with your own
+**You don’t need shadcn-vue to use `@hosterai/shadcn-vue-lint`. It works with your own
 Tailwind components and theme.**
 
 shadcn-vue projects get automatic component and theme discovery via
@@ -442,7 +516,7 @@ For a UI package in `packages/ui`, add this to the config from the setup
 above:
 
 ```js
-import { plugin as shadcnVue } from "@tpapamichail/shadcn-vue-lint"
+import { plugin as shadcnVue } from "@hosterai/shadcn-vue-lint"
 import tsParser from "@typescript-eslint/parser"
 import vueParser from "vue-eslint-parser"
 

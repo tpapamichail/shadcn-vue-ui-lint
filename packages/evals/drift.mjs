@@ -40,7 +40,7 @@ const MAX_ROUNDS = 3
 const lint = await import(
   process.env.SHADCN_LINT_PLUGIN
     ? pathToFileURL(path.resolve(process.env.SHADCN_LINT_PLUGIN)).href
-    : "@tpapamichail/shadcn-vue-lint"
+    : "@hosterai/shadcn-vue-lint"
 )
 
 const runId = `drift-${new Date().toISOString().replace(/[:.]/g, "-")}`

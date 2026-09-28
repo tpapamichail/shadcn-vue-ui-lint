@@ -8,7 +8,7 @@
 
 import * as fs from "node:fs"
 import * as path from "node:path"
-import { project } from "@tpapamichail/shadcn-vue-lint"
+import { project } from "@hosterai/shadcn-vue-lint"
 
 import { manifestFor } from "./fixture.mjs"
 

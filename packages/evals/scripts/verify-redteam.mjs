@@ -21,7 +21,7 @@ import { RULES, UI_RULES } from "../lib/policy.mjs"
 const { plugin } = await import(
   process.env.SHADCN_LINT_PLUGIN
     ? pathToFileURL(path.resolve(process.env.SHADCN_LINT_PLUGIN)).href
-    : "@tpapamichail/shadcn-vue-lint"
+    : "@hosterai/shadcn-vue-lint"
 )
 
 const VERBOSE = process.argv.includes("--verbose")

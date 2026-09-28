@@ -121,7 +121,7 @@ describe('settings["shadcn-vue"].ui', () => {
       })
     ).toEqual([])
     expect(warnings).toEqual([
-      '[@tpapamichail/shadcn-vue-lint] settings["shadcn-vue"].ui must be a string or an array of strings; it is ignored.',
+      '[@hosterai/shadcn-vue-lint] settings["shadcn-vue"].ui must be a string or an array of strings; it is ignored.',
     ])
   })
 })

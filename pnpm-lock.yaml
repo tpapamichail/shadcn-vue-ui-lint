@@ -38,7 +38,7 @@ importers:
 
   packages/evals:
     dependencies:
-      '@tpapamichail/shadcn-vue-lint':
+      '@hosterai/shadcn-vue-lint':
         specifier: workspace:*
         version: link:../lint
     devDependencies:

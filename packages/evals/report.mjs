@@ -55,7 +55,7 @@ lines.push(`## Scoreboard`)
 lines.push(``)
 if (hasControl) {
   lines.push(
-    `| Metric | Before (no lint) | Control (rules, no diagnostics) | After (@tpapamichail/shadcn-vue-lint) |`
+    `| Metric | Before (no lint) | Control (rules, no diagnostics) | After (@hosterai/shadcn-vue-lint) |`
   )
   lines.push(`|---|---|---|---|`)
   lines.push(`| Total violations | ${totalA} | ${totalB} | ${totalC} |`)
@@ -67,7 +67,7 @@ if (hasControl) {
   )
 } else {
   lines.push(
-    `| Metric | Before (no lint) | After (@tpapamichail/shadcn-vue-lint) |`
+    `| Metric | Before (no lint) | After (@hosterai/shadcn-vue-lint) |`
   )
   lines.push(`|---|---|---|`)
   lines.push(`| Total violations | ${totalA} | ${totalC} |`)

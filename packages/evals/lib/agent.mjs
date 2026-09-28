@@ -96,7 +96,7 @@ export function feedbackPrompt(
 
 ${task.prompt}
 
-The project's linter (@tpapamichail/shadcn-vue-lint) reports these violations:
+The project's linter (@hosterai/shadcn-vue-lint) reports these violations:
 
 ${formatFindings(findings)}
 
@@ -119,7 +119,7 @@ export function reviewPrompt(
 
 ${task.prompt}
 
-This project enforces styling rules with a linter (@tpapamichail/shadcn-vue-lint). Review ${task.file} against the rules below and fix every violation you find.
+This project enforces styling rules with a linter (@hosterai/shadcn-vue-lint). Review ${task.file} against the rules below and fix every violation you find.
 
 ${RULES.replaceAll("components/ui", manifest.componentsDir)}
 

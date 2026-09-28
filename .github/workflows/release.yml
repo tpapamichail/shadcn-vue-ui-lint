@@ -2,10 +2,10 @@ name: Release
 
 # Changesets flow: pushes to master with pending changesets open (or update) a
 # "Version Packages" PR; merging that PR publishes
-# `@tpapamichail/shadcn-vue-lint` to npm with provenance. Publishing runs
+# `@hosterai/shadcn-vue-lint` to npm with provenance. Publishing runs
 # the full gate set first via `pnpm run release`, and authenticates via OIDC
 # trusted publishing (id-token: write) — no npm token exists anywhere. The
-# `@tpapamichail/shadcn-vue-lint` package on npmjs.com must list this repo
+# `@hosterai/shadcn-vue-lint` package on npmjs.com must list this repo
 # and workflow as a trusted publisher. While the package is marked
 # `private`, changesets skip it and nothing is published.
 on:

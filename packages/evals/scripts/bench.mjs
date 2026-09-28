@@ -3,7 +3,7 @@
 // rules, and each rule alone. Warm numbers, from the ESLint API, so
 // Node and ESLint startup are excluded. Run: pnpm --filter evals bench
 
-import { plugin } from "@tpapamichail/shadcn-vue-lint"
+import { plugin } from "@hosterai/shadcn-vue-lint"
 import tsParser from "@typescript-eslint/parser"
 import { ESLint } from "eslint"
 

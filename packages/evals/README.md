@@ -1,6 +1,6 @@
-# @tpapamichail/shadcn-vue-lint evals
+# @hosterai/shadcn-vue-lint evals
 
-The harness that measures agent-written UI before and after `@tpapamichail/shadcn-vue-lint`
+The harness that measures agent-written UI before and after `@hosterai/shadcn-vue-lint`
 feedback. What it shows, how a run works, the recorded numbers, and how
 to reproduce them are all in [docs/evals.md](../../docs/evals.md).
 

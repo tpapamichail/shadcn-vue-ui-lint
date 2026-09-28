@@ -64,7 +64,7 @@ function transportFailed(reason: string) {
     bridge = false
     warnOnce(
       "tailwind:off",
-      `The Tailwind worker failed twice (${reason}); no-unknown-classes is using the grammar bundled with @tpapamichail/shadcn-vue-lint for the rest of this run.`
+      `The Tailwind worker failed twice (${reason}); no-unknown-classes is using the grammar bundled with @hosterai/shadcn-vue-lint for the rest of this run.`
     )
   }
   return null
@@ -78,7 +78,7 @@ function start() {
     bridge = false
     warnOnce(
       "tailwind:off",
-      "The Tailwind worker script was not found next to @tpapamichail/shadcn-vue-lint; no-unknown-classes is using the bundled grammar."
+      "The Tailwind worker script was not found next to @hosterai/shadcn-vue-lint; no-unknown-classes is using the bundled grammar."
     )
     return null
   }
@@ -150,7 +150,7 @@ function themeFailed(cssFile: string, reason: string) {
   memos.delete(cssFile)
   warnOnce(
     `tailwind:${cssFile}:${reason}`,
-    `The Tailwind theme at ${cssFile} could not be built (${reason}); no-unknown-classes is using the grammar bundled with @tpapamichail/shadcn-vue-lint there until it can.`
+    `The Tailwind theme at ${cssFile} could not be built (${reason}); no-unknown-classes is using the grammar bundled with @hosterai/shadcn-vue-lint there until it can.`
   )
   return null
 }

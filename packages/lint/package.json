@@ -1,5 +1,5 @@
 {
-  "name": "@tpapamichail/shadcn-vue-lint",
+  "name": "@hosterai/shadcn-vue-lint",
   "version": "0.1.0",
   "description": "A programmable agent-first linter for Tailwind design systems in Vue.",
   "license": "MIT",

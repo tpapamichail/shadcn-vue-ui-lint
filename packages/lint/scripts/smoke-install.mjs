@@ -1,4 +1,4 @@
-// Packs @tpapamichail/shadcn-vue-lint the way `npm publish` would,
+// Packs @hosterai/shadcn-vue-lint the way `npm publish` would,
 // installs the tarball into a fresh project outside the workspace, and
 // lints that project with ESLint + vue-eslint-parser. Catches what unit
 // tests cannot: the exports map, the ESM build and its worker, the
@@ -11,7 +11,7 @@ import * as os from "node:os"
 import * as path from "node:path"
 import { fileURLToPath } from "node:url"
 
-const PKG = "@tpapamichail/shadcn-vue-lint"
+const PKG = "@hosterai/shadcn-vue-lint"
 const PKG_DIR = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..")
 const dir = fs.mkdtempSync(path.join(os.tmpdir(), "shadcn-vue-lint-smoke-"))
 const run = (cmd, cwd = dir) =>

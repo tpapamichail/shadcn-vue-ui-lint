@@ -7,7 +7,7 @@ Run the checks below before submitting a change. For publishing, see the
 
 This pnpm workspace has two packages:
 
-- `packages/lint`: the publishable `@tpapamichail/shadcn-vue-lint`
+- `packages/lint`: the publishable `@hosterai/shadcn-vue-lint`
   package, with rules, class classification, project analysis, and tests.
 - `packages/evals`: tools for agent evals, visual comparison,
   registry scans, classifier parity, and bypass checks. This package is not published.
@@ -52,7 +52,7 @@ node packages/evals/scripts/corpus.mjs --rule no-unknown-classes
 To check a separate build without replacing `packages/lint/dist`:
 
 ```bash
-pnpm --filter @tpapamichail/shadcn-vue-lint exec tsdown --out-dir dist-next
+pnpm --filter @hosterai/shadcn-vue-lint exec tsdown --out-dir dist-next
 SHADCN_LINT_PLUGIN=packages/lint/dist-next/index.js node packages/evals/scripts/corpus.mjs
 ```
 
@@ -75,7 +75,7 @@ Paths in this section are relative to `packages/lint`.
 1. Update `tailwindcss` in `packages/lint`, then regenerate the theme:
 
    ```bash
-   pnpm --filter @tpapamichail/shadcn-vue-lint exec node scripts/generate-tailwind-theme.mjs
+   pnpm --filter @hosterai/shadcn-vue-lint exec node scripts/generate-tailwind-theme.mjs
    ```
 
    Include the generated file with the update. `test/generated.test.ts`
@@ -150,7 +150,7 @@ query also loads Tailwind.
 After building, run:
 
 ```bash
-pnpm --filter @tpapamichail/shadcn-vue-lint exec node scripts/smoke-install.mjs
+pnpm --filter @hosterai/shadcn-vue-lint exec node scripts/smoke-install.mjs
 ```
 
 This packs the package, installs it with ESLint, `vue-eslint-parser`, and

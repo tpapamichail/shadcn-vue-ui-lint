@@ -33,7 +33,7 @@ describe("contract message validation", () => {
     )
 
     expect(warnings).toEqual([
-      '[@tpapamichail/shadcn-vue-lint] Unknown message placeholder "{{varaints}}" in contract "^Button$". Did you mean "{{variants}}"? It will remain literal.',
+      '[@hosterai/shadcn-vue-lint] Unknown message placeholder "{{varaints}}" in contract "^Button$". Did you mean "{{variants}}"? It will remain literal.',
     ])
 
     const verdict = contracts.decide("Button", "w-full")

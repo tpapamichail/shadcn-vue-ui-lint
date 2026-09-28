@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Runs the @tpapamichail/shadcn-vue-lint rules across the registry (report-only) to
+// Runs the @hosterai/shadcn-vue-lint rules across the registry (report-only) to
 // measure real-world flag rates. The registry defines idiomatic usage:
 // every flag here is either a rule bug or a registry bug.
 //
@@ -24,7 +24,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const { plugin } = await import(
   process.env.SHADCN_LINT_PLUGIN
     ? pathToFileURL(path.resolve(process.env.SHADCN_LINT_PLUGIN)).href
-    : "@tpapamichail/shadcn-vue-lint"
+    : "@hosterai/shadcn-vue-lint"
 )
 
 // The registry is fetched at the commit pinned in scripts/registry.json.

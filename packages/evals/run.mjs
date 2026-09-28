@@ -4,7 +4,7 @@
 // Condition A (before): one fresh, context-free agent generates the
 // component with no lint anywhere.
 // Condition C (after): starts from A's exact output, then gets
-// @tpapamichail/shadcn-vue-lint diagnostics fed back (like tsc errors) for up to
+// @hosterai/shadcn-vue-lint diagnostics fed back (like tsc errors) for up to
 // MAX_ROUNDS rounds.
 //
 // Condition B (control, --control): also starts from A's exact output

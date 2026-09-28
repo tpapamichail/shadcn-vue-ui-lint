@@ -1,4 +1,4 @@
-# @tpapamichail/shadcn-vue-lint
+# @hosterai/shadcn-vue-lint
 
 ## 0.1.0
 

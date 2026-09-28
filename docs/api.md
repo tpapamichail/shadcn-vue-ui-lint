@@ -30,7 +30,7 @@ defining file to the variant methods:
 
 ```ts
 import { resolve } from "node:path"
-import { project } from "@tpapamichail/shadcn-vue-lint"
+import { project } from "@hosterai/shadcn-vue-lint"
 
 const theme = project.themeFileFor(resolve("src/App.vue"))
 const variants = project.variantNamesFor(

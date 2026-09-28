@@ -1,4 +1,4 @@
-// @tpapamichail/shadcn-vue-lint: the plugin, and a small window onto the project model.
+// @hosterai/shadcn-vue-lint: the plugin, and a small window onto the project model.
 // There is no preset; the README shows the setup.
 
 import { plugin } from "./plugin"

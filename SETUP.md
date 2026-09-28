@@ -1,6 +1,6 @@
-# Set up @tpapamichail/shadcn-vue-lint
+# Set up @hosterai/shadcn-vue-lint
 
-Install and register `@tpapamichail/shadcn-vue-lint` in the user's project.
+Install and register `@hosterai/shadcn-vue-lint` in the user's project.
 Do not enable new rules or change existing rule policies. Once setup is
 complete, help the user find where to configure their rules.
 
@@ -49,7 +49,7 @@ Tell the user:
 
 - What was installed and which configuration files changed.
 - How to run lint, including workspace commands where applicable.
-- That no new `@tpapamichail/shadcn-vue-lint` rules were enabled. If the
+- That no new `@hosterai/shadcn-vue-lint` rules were enabled. If the
   project already had rules configured, explain that those were
   preserved.
 - Where to add rules, and where to read the

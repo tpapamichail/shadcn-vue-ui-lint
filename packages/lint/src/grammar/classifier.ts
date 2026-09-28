@@ -327,7 +327,7 @@ export function classifierFor(fromFile?: string) {
       // A newer cn with a validator this version does not know.
       warnOnce(
         "classifier:fallback",
-        `The installed cn's grammar could not be loaded (${(error as Error).message}); using the grammar bundled with @tpapamichail/shadcn-vue-lint. Update @tpapamichail/shadcn-vue-lint.`
+        `The installed cn's grammar could not be loaded (${(error as Error).message}); using the grammar bundled with @hosterai/shadcn-vue-lint. Update @hosterai/shadcn-vue-lint.`
       )
       const fallback = bundled()
       classifier =
@@ -339,7 +339,7 @@ export function classifierFor(fromFile?: string) {
     if (unknown.length) {
       warnOnce(
         `groups:${unknown.join(",")}`,
-        `The installed cn declares class groups this version of @tpapamichail/shadcn-vue-lint has no category for: ${unknown.join(", ")}. They are treated as layout. Update @tpapamichail/shadcn-vue-lint.`
+        `The installed cn declares class groups this version of @hosterai/shadcn-vue-lint has no category for: ${unknown.join(", ")}. They are treated as layout. Update @hosterai/shadcn-vue-lint.`
       )
     }
   }

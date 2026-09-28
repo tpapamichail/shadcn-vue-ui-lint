@@ -275,7 +275,7 @@ describe("componentPrefix", () => {
       })
     ).toEqual([])
     expect(warnings).toEqual([
-      '[@tpapamichail/shadcn-vue-lint] settings["shadcn-vue"].componentPrefix must be a string; it is ignored.',
+      '[@hosterai/shadcn-vue-lint] settings["shadcn-vue"].componentPrefix must be a string; it is ignored.',
     ])
   })
 
