@@ -68,7 +68,7 @@ export const noRestyle = {
     docs: {
       description:
         "Disallow classes on design-system components except what the rule's allow list and the component's contract permit.",
-      url: "https://github.com/tpapamichail/shadcn-vue-ui-lint/blob/main/docs/rules/no-restyle.md",
+      url: "https://github.com/tpapamichail/shadcn-vue-ui-lint/blob/master/docs/rules/no-restyle.md",
     },
     schema: [
       {

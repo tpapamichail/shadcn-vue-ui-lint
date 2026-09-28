@@ -4,7 +4,7 @@ Install and register `@tpapamichail/shadcn-vue-lint` in the user's project.
 Do not enable new rules or change existing rule policies. Once setup is
 complete, help the user find where to configure their rules.
 
-Read the [setup and configuration documentation](https://github.com/tpapamichail/shadcn-vue-ui-lint/blob/main/README.md#get-started)
+Read the [setup and configuration documentation](https://github.com/tpapamichail/shadcn-vue-ui-lint/blob/master/README.md#get-started)
 before making changes. The examples there enable rules; use their plugin
 and parser setup without adding those rules.
 
@@ -18,7 +18,7 @@ and parser setup without adding those rules.
   documentation.
 - Find the component directories, import aliases, and Tailwind v4 themes.
   Use `components.json` where available. For custom setups, consult the
-  [discovery documentation](https://github.com/tpapamichail/shadcn-vue-ui-lint/blob/main/docs/how-it-works.md)
+  [discovery documentation](https://github.com/tpapamichail/shadcn-vue-ui-lint/blob/master/docs/how-it-works.md)
   and configure only the settings the project needs.
 
 ## Install and register the plugin
@@ -53,7 +53,7 @@ Tell the user:
   project already had rules configured, explain that those were
   preserved.
 - Where to add rules, and where to read the
-  [available rules](https://github.com/tpapamichail/shadcn-vue-ui-lint/blob/main/README.md#rules)
-  and [configuration examples](https://github.com/tpapamichail/shadcn-vue-ui-lint/blob/main/docs/design-systems.md).
+  [available rules](https://github.com/tpapamichail/shadcn-vue-ui-lint/blob/master/README.md#rules)
+  and [configuration examples](https://github.com/tpapamichail/shadcn-vue-ui-lint/blob/master/docs/design-systems.md).
 
 Leave choosing rules and defining what is allowed to the user.

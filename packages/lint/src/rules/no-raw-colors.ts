@@ -161,7 +161,7 @@ export const noRawColors = {
     docs: {
       description:
         "Require theme tokens for color utilities instead of the raw Tailwind palette.",
-      url: "https://github.com/tpapamichail/shadcn-vue-ui-lint/blob/main/docs/rules/no-raw-colors.md",
+      url: "https://github.com/tpapamichail/shadcn-vue-ui-lint/blob/master/docs/rules/no-raw-colors.md",
     },
     schema: [
       {

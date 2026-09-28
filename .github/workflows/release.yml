@@ -1,6 +1,6 @@
 name: Release
 
-# Changesets flow: pushes to main with pending changesets open (or update) a
+# Changesets flow: pushes to master with pending changesets open (or update) a
 # "Version Packages" PR; merging that PR publishes
 # `@tpapamichail/shadcn-vue-lint` to npm with provenance. Publishing runs
 # the full gate set first via `pnpm run release`, and authenticates via OIDC
@@ -10,7 +10,7 @@ name: Release
 # `private`, changesets skip it and nothing is published.
 on:
   push:
-    branches: [main]
+    branches: [master]
 
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 

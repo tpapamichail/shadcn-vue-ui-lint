@@ -18,7 +18,7 @@ export const requireStaticClasses = {
     docs: {
       description:
         "Require statically analyzable class values on design-system components.",
-      url: "https://github.com/tpapamichail/shadcn-vue-ui-lint/blob/main/docs/rules/require-static-classes.md",
+      url: "https://github.com/tpapamichail/shadcn-vue-ui-lint/blob/master/docs/rules/require-static-classes.md",
     },
     schema: [
       {

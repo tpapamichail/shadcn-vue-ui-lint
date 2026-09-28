@@ -27,7 +27,7 @@ You define what’s allowed. When an agent breaks a rule, the error explains wha
 Give your coding agent this prompt:
 
 ```text
-Read https://github.com/tpapamichail/shadcn-vue-ui-lint/blob/main/SETUP.md
+Read https://github.com/tpapamichail/shadcn-vue-ui-lint/blob/master/SETUP.md
 and set up @tpapamichail/shadcn-vue-lint in this project.
 ```
 
@@ -194,7 +194,7 @@ Here are the errors before and after lint feedback in one run per model:
 In the Claude control runs, fixing violations with lint feedback cost
 **10% to 48% less** than with rules alone.
 
-See the [evals](https://github.com/tpapamichail/shadcn-vue-ui-lint/blob/main/docs/evals.md) for results and methodology.
+See the [evals](https://github.com/tpapamichail/shadcn-vue-ui-lint/blob/master/docs/evals.md) for results and methodology.
 
 ## Why a linter?
 
@@ -275,7 +275,7 @@ If your theme is in `src/index.css`, the error becomes:
 Use a theme color from src/index.css.
 ```
 
-See all [message placeholders](https://github.com/tpapamichail/shadcn-vue-ui-lint/blob/main/docs/rules.md#your-own-words).
+See all [message placeholders](https://github.com/tpapamichail/shadcn-vue-ui-lint/blob/master/docs/rules.md#your-own-words).
 
 ### Contracts
 
@@ -301,7 +301,7 @@ title's typography:
 </template>
 ```
 
-See [contracts and custom messages](https://github.com/tpapamichail/shadcn-vue-ui-lint/blob/main/docs/design-systems.md).
+See [contracts and custom messages](https://github.com/tpapamichail/shadcn-vue-ui-lint/blob/master/docs/design-systems.md).
 
 ## Get started
 
@@ -364,16 +364,16 @@ We developed these rules by studying production design systems and testing
 them with coding agents. They’re built for Tailwind, with errors that help
 agents follow your design system.
 
-| Rule                                                                                                                          | What it catches                                                        |
-| ----------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------- |
-| [`no-restyle`](https://github.com/tpapamichail/shadcn-vue-ui-lint/blob/main/docs/rules/no-restyle.md)                         | Restyling a component with `class`.                                    |
-| [`no-raw-colors`](https://github.com/tpapamichail/shadcn-vue-ui-lint/blob/main/docs/rules/no-raw-colors.md)                   | Raw colors such as `bg-pink-500`.                                      |
-| [`no-arbitrary-values`](https://github.com/tpapamichail/shadcn-vue-ui-lint/blob/main/docs/rules/no-arbitrary-values.md)       | Arbitrary values such as `p-[13px]`.                                   |
-| [`no-inline-styles`](https://github.com/tpapamichail/shadcn-vue-ui-lint/blob/main/docs/rules/no-inline-styles.md)             | Inline styles such as `style="color: red"`.                            |
-| [`no-unknown-classes`](https://github.com/tpapamichail/shadcn-vue-ui-lint/blob/main/docs/rules/no-unknown-classes.md)         | Classes Tailwind cannot generate, such as `rounded-huge`.              |
-| [`require-static-classes`](https://github.com/tpapamichail/shadcn-vue-ui-lint/blob/main/docs/rules/require-static-classes.md) | Component classes the linter cannot read, such as `` `bg-${color}` ``. |
+| Rule                                                                                                                            | What it catches                                                        |
+| ------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------- |
+| [`no-restyle`](https://github.com/tpapamichail/shadcn-vue-ui-lint/blob/master/docs/rules/no-restyle.md)                         | Restyling a component with `class`.                                    |
+| [`no-raw-colors`](https://github.com/tpapamichail/shadcn-vue-ui-lint/blob/master/docs/rules/no-raw-colors.md)                   | Raw colors such as `bg-pink-500`.                                      |
+| [`no-arbitrary-values`](https://github.com/tpapamichail/shadcn-vue-ui-lint/blob/master/docs/rules/no-arbitrary-values.md)       | Arbitrary values such as `p-[13px]`.                                   |
+| [`no-inline-styles`](https://github.com/tpapamichail/shadcn-vue-ui-lint/blob/master/docs/rules/no-inline-styles.md)             | Inline styles such as `style="color: red"`.                            |
+| [`no-unknown-classes`](https://github.com/tpapamichail/shadcn-vue-ui-lint/blob/master/docs/rules/no-unknown-classes.md)         | Classes Tailwind cannot generate, such as `rounded-huge`.              |
+| [`require-static-classes`](https://github.com/tpapamichail/shadcn-vue-ui-lint/blob/master/docs/rules/require-static-classes.md) | Component classes the linter cannot read, such as `` `bg-${color}` ``. |
 
-See [rule options](https://github.com/tpapamichail/shadcn-vue-ui-lint/blob/main/docs/rules.md) and [how to add more rules](https://github.com/tpapamichail/shadcn-vue-ui-lint/blob/main/docs/adoption.md#add-more-rules).
+See [rule options](https://github.com/tpapamichail/shadcn-vue-ui-lint/blob/master/docs/rules.md) and [how to add more rules](https://github.com/tpapamichail/shadcn-vue-ui-lint/blob/master/docs/adoption.md#add-more-rules).
 
 ## Settings
 
@@ -433,7 +433,7 @@ settings do not apply to `no-inline-styles`; `note` applies to every rule.
 
 When you change the component directory, update the setup's directory
 override too, for example `src/ds/**/*.vue`.
-See [rule options](https://github.com/tpapamichail/shadcn-vue-ui-lint/blob/main/docs/rules.md#recognition) for more examples.
+See [rule options](https://github.com/tpapamichail/shadcn-vue-ui-lint/blob/master/docs/rules.md#recognition) for more examples.
 
 ### Monorepos
 
@@ -487,13 +487,13 @@ keeps its own theme configuration.
 
 ## Documentation
 
-See the [documentation](https://github.com/tpapamichail/shadcn-vue-ui-lint/blob/main/docs/README.md) for rule examples, configuration,
+See the [documentation](https://github.com/tpapamichail/shadcn-vue-ui-lint/blob/master/docs/README.md) for rule examples, configuration,
 troubleshooting, and evals.
 
 ## Contributing
 
-Please read the [contributing guide](https://github.com/tpapamichail/shadcn-vue-ui-lint/blob/main/CONTRIBUTING.md).
+Please read the [contributing guide](https://github.com/tpapamichail/shadcn-vue-ui-lint/blob/master/CONTRIBUTING.md).
 
 ## License
 
-Licensed under the [MIT license](https://github.com/tpapamichail/shadcn-vue-ui-lint/blob/main/LICENSE).
+Licensed under the [MIT license](https://github.com/tpapamichail/shadcn-vue-ui-lint/blob/master/LICENSE).

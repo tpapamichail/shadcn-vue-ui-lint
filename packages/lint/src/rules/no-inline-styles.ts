@@ -275,7 +275,7 @@ export const noInlineStyles = {
     docs: {
       description:
         "Disallow inline style attributes, except CSS custom properties.",
-      url: "https://github.com/tpapamichail/shadcn-vue-ui-lint/blob/main/docs/rules/no-inline-styles.md",
+      url: "https://github.com/tpapamichail/shadcn-vue-ui-lint/blob/master/docs/rules/no-inline-styles.md",
     },
     schema: [
       {

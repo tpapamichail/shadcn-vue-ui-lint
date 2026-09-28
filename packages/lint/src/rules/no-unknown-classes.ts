@@ -41,7 +41,7 @@ export const noUnknownClasses = {
     docs: {
       description:
         "Disallow classes Tailwind does not know; no CSS is generated for them.",
-      url: "https://github.com/tpapamichail/shadcn-vue-ui-lint/blob/main/docs/rules/no-unknown-classes.md",
+      url: "https://github.com/tpapamichail/shadcn-vue-ui-lint/blob/master/docs/rules/no-unknown-classes.md",
     },
     schema: [
       {
