@@ -167,7 +167,8 @@ register helpers whose arguments accurately describe their output.
 | `message` | Built-in guidance | Replaces the error text. `{{component}}` names the resolved component. |
 
 The rule also accepts [recognition options](../rules.md#recognition):
-`componentImports`, `ignoreImports`, `mergeFunctions`, and `variantFunctions`.
+`componentImports`, `ignoreImports`, `componentPrefix`, `mergeFunctions`,
+and `variantFunctions`.
 
 It has no `allow`, `deny`, or `contracts`. It checks whether a class value
 can be read; the other rules decide whether that value is allowed.

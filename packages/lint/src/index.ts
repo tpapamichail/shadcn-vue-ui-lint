@@ -52,6 +52,7 @@ declare module "@eslint/core" {
               >
           componentImports?: string[]
           ignoreImports?: string[]
+          componentPrefix?: string
           mergeFunctions?: string[]
           variantFunctions?: string[]
           contracts?: {
@@ -92,6 +93,7 @@ declare module "@eslint/core" {
           scanAllStrings?: boolean
           componentImports?: string[]
           ignoreImports?: string[]
+          componentPrefix?: string
           mergeFunctions?: string[]
           variantFunctions?: string[]
         },
@@ -112,6 +114,7 @@ declare module "@eslint/core" {
           scanAllStrings?: boolean
           componentImports?: string[]
           ignoreImports?: string[]
+          componentPrefix?: string
           mergeFunctions?: string[]
           variantFunctions?: string[]
         },
@@ -138,6 +141,7 @@ declare module "@eslint/core" {
           message?: string
           componentImports?: string[]
           ignoreImports?: string[]
+          componentPrefix?: string
           mergeFunctions?: string[]
           variantFunctions?: string[]
         },
@@ -157,6 +161,7 @@ declare module "@eslint/core" {
           message?: string
           componentImports?: string[]
           ignoreImports?: string[]
+          componentPrefix?: string
           mergeFunctions?: string[]
           variantFunctions?: string[]
         },

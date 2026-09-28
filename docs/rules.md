@@ -123,14 +123,16 @@ entries because they may name external classes.
 
 ### Recognition
 
-Every rule except `no-inline-styles` accepts these options as arrays of strings:
+Every rule except `no-inline-styles` accepts these recognition options,
+as arrays of strings (`componentPrefix` excepted, a single string):
 
-| Option             | What it does                                          |
-| ------------------ | ----------------------------------------------------- |
-| `componentImports` | Recognizes component imports using regex patterns.    |
-| `ignoreImports`    | Excludes matching imports from component recognition. |
-| `mergeFunctions`   | Adds functions whose arguments contain classes.       |
-| `variantFunctions` | Adds functions whose object values contain classes.   |
+| Option             | What it does                                                                  |
+| ------------------ | ----------------------------------------------------------------------------- |
+| `componentImports` | Recognizes component imports using regex patterns.                            |
+| `ignoreImports`    | Excludes matching imports from component recognition.                         |
+| `mergeFunctions`   | Adds functions whose arguments contain classes.                               |
+| `variantFunctions` | Adds functions whose object values contain classes.                           |
+| `componentPrefix`  | Strips a registration prefix from an auto-imported tag name. A single string. |
 
 Import ignores take precedence over recognition. Function lists extend
 the built-ins: `cn`, `cx`, `clsx`, `cva`, `tv`, `twMerge`, `twJoin`, and
@@ -142,6 +144,7 @@ Set shared defaults through the `shadcn-vue` settings key:
 settings: {
   "shadcn-vue": {
     ui: "@/ds",
+    componentPrefix: "Ui",
     mergeFunctions: ["mergeClasses"],
   },
 }
@@ -151,8 +154,18 @@ settings: {
 not `@/dsx`. Use an array for multiple prefixes. It always applies
 alongside `componentImports`.
 
-Shared recognition settings accept a string or an array. A rule's own
-option takes precedence over the matching shared setting. See
+`componentPrefix` is the prefix a component registration puts in front
+of every name, as Nuxt's `components: [{ path: "~/components/ui", prefix:
+"Ui" }]` does. With it, an auto-imported `<UiButton>` is the project's
+own `Button` even though nothing imports it, and `<ui-card-title>` is
+`CardTitle`. Only a name the project's component directory owns answers,
+so `<UiNotAComponent>` stays unrecognized. The prefix never renames a
+component in a finding: a diagnostic, a contract pattern and a variant
+hint all use the unprefixed name.
+
+Shared recognition settings accept a string or an array;
+`componentPrefix` takes a single string. A rule's own option takes
+precedence over the matching shared setting. See
 [Settings](../README.md#settings) for all settings and a monorepo example.
 
 ### Your own words

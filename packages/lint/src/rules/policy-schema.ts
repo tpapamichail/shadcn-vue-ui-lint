@@ -11,6 +11,9 @@ export const recognitionSchema = {
   ignoreImports: entriesSchema,
   mergeFunctions: entriesSchema,
   variantFunctions: entriesSchema,
+  // A component registration's tag prefix, as Nuxt's `Ui`: a single
+  // string, not a list.
+  componentPrefix: { type: "string" },
 }
 
 export const contractsSchema = {

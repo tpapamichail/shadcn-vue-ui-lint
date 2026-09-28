@@ -163,7 +163,8 @@ See [wrappers](../how-it-works.md#wrappers) and
 | `message`   | Built-in guidance | Replaces the error text with a string or category-to-message object.    |
 
 The rule also accepts [recognition options](../rules.md#recognition):
-`componentImports`, `ignoreImports`, `mergeFunctions`, and `variantFunctions`.
+`componentImports`, `ignoreImports`, `componentPrefix`, `mergeFunctions`,
+and `variantFunctions`.
 
 ## Limits
 

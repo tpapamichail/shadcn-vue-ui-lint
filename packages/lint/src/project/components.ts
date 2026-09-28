@@ -129,6 +129,22 @@ function signatureFor(entries: string[], deps: string[]) {
   return `${entries.join(",")}||${signatureOf(deps)}`
 }
 
+// The name a tag answers to in this project's ui directory: its own
+// name, or the name behind a registration prefix, as Nuxt registers
+// `Button` for a `Ui` prefix and its template writes `<UiButton>`.
+// Only a name the directory itself owns counts, so `<UiNotAComponent>`
+// names nothing, prefixed or not.
+export function componentNameIn(
+  index: ComponentIndex,
+  name: string,
+  prefix?: string
+) {
+  if (index.has(name)) return name
+  if (!prefix || !name.startsWith(prefix)) return null
+  const rest = name.slice(prefix.length)
+  return rest && index.has(rest) ? rest : null
+}
+
 // A project without a ui directory gets an empty index and relies on
 // componentImports.
 export function componentsFor(fromFile: string) {

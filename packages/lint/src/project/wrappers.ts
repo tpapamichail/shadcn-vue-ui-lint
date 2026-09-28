@@ -13,7 +13,7 @@ import {
   importNameOf,
   type ComponentImport,
 } from "./component-imports"
-import { componentsFor } from "./components"
+import { componentNameIn, componentsFor } from "./components"
 import { mtimeOf, NODE_MODULES, TTL } from "./fs"
 import { definingExportOf } from "./modules"
 import { sfcComponentName, sfcOf } from "./sfc"
@@ -260,6 +260,7 @@ function rootSlotsOf(template: Node): Node[][] {
 function build(
   file: string,
   patterns: RegExp[],
+  prefix: string | undefined,
   visiting: Set<string>,
   deps: Set<string>,
   parsed?: ParsedSfc
@@ -295,11 +296,12 @@ function build(
       const imported = imports.get(name)
       if (!imported) {
         // Unimported: only a ui component of the project answers to the
-        // name.
-        if (index.has(name)) {
+        // name, with or without the prefix its registration adds.
+        const component = componentNameIn(index, name, prefix)
+        if (component) {
           return {
-            component: name,
-            file: index.files.get(name) ?? null,
+            component,
+            file: index.files.get(component) ?? null,
           }
         }
         continue
@@ -338,6 +340,7 @@ function build(
         binding.file,
         binding.name,
         patterns,
+        prefix,
         visiting,
         deps
       )
@@ -391,13 +394,16 @@ function lookup(
   file: string,
   exportName: string,
   patterns: RegExp[],
+  prefix: string | undefined,
   visiting: Set<string>,
   deps: Set<string> | undefined,
   parsed?: ParsedSfc
 ): { target: WrapperTarget | null; complete: boolean } {
   deps?.add(file)
   if (mtimeOf(file) === null) return { target: null, complete: false }
-  const key = `${file}|${patterns.map((p) => p.source).join(",")}`
+  // The prefix answers a different name for the same tag, so it is part
+  // of what this entry means.
+  const key = `${file}|${patterns.map((p) => p.source).join(",")}|${prefix ?? ""}`
   const cached = cache.get(key)
   const now = Date.now()
   if (
@@ -417,7 +423,14 @@ function lookup(
   }
   visiting.add(file)
   const own = new Set<string>()
-  const { wrappers, complete } = build(file, patterns, visiting, own, parsed)
+  const { wrappers, complete } = build(
+    file,
+    patterns,
+    prefix,
+    visiting,
+    own,
+    parsed
+  )
   visiting.delete(file)
   if (deps) {
     for (const dep of own) {
@@ -442,9 +455,18 @@ export function wrapperTargetOf(
   file: string,
   exportName: string,
   patterns: RegExp[] = [],
-  parsed?: ParsedSfc
+  parsed?: ParsedSfc,
+  prefix?: string
 ): WrapperTarget | null {
-  return lookup(file, exportName, patterns, new Set(), undefined, parsed).target
+  return lookup(
+    file,
+    exportName,
+    patterns,
+    prefix,
+    new Set(),
+    undefined,
+    parsed
+  ).target
 }
 
 export function clearWrapperCache() {

@@ -394,6 +394,7 @@ settings: {
   "shadcn-vue": {
     ui: "@/ds",
     componentImports: ["^@acme/ui(/|$)"],
+    componentPrefix: "Ui",
     ignoreImports: ["^@acme/ui/internal(/|$)"],
     mergeFunctions: ["customMerge"],
     variantFunctions: ["variants"],
@@ -402,17 +403,25 @@ settings: {
 },
 ```
 
-| Setting            | What it does                                                                                              |
-| ------------------ | --------------------------------------------------------------------------------------------------------- |
-| `ui`               | Recognizes component imports by prefix. `@/ds` matches `@/ds` and `@/ds/button`, but not `@/dsx`.         |
-| `componentImports` | Recognizes component imports using regex patterns. Use it for additional directories or packages.         |
-| `ignoreImports`    | Skips component recognition for imports matching these regex patterns. Takes precedence over recognition. |
-| `mergeFunctions`   | Adds functions whose arguments contain classes, such as `customMerge("mt-4", "w-full")`.                  |
-| `variantFunctions` | Adds functions whose object values contain classes.                                                       |
-| `note`             | Appends your text to every rule's error or warning.                                                       |
+| Setting            | What it does                                                                                                                                 |
+| ------------------ | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ui`               | Recognizes component imports by prefix. `@/ds` matches `@/ds` and `@/ds/button`, but not `@/dsx`.                                            |
+| `componentImports` | Recognizes component imports using regex patterns. Use it for additional directories or packages.                                            |
+| `ignoreImports`    | Skips component recognition for imports matching these regex patterns. Takes precedence over recognition.                                    |
+| `componentPrefix`  | Recognizes auto-imported components registered under a name prefix, as Nuxt's `Ui`: `<UiButton>` is the project's `Button`. A single string. |
+| `mergeFunctions`   | Adds functions whose arguments contain classes, such as `customMerge("mt-4", "w-full")`.                                                     |
+| `variantFunctions` | Adds functions whose object values contain classes.                                                                                          |
+| `note`             | Appends your text to every rule's error or warning.                                                                                          |
 
-All settings except `note` accept a string or an array of strings.
-`note` accepts a string.
+All settings except `note` and `componentPrefix` accept a string or an
+array of strings. `note` and `componentPrefix` accept a string.
+
+`componentPrefix` names one prefix, the one a component registration puts
+in front of every name. Set it to the same prefix your framework is
+configured with, such as Nuxt's `components: [{ path: "~/components/ui",
+prefix: "Ui" }]`. Only a name the project's own component directory owns
+answers, so `<UiNotAComponent>` is still nobody's component. Findings,
+contracts and variant hints speak of the unprefixed name.
 
 The built-in class functions are `cn`, `cx`, `clsx`, `cva`, `tv`,
 `twMerge`, `twJoin`, and `classNames`. The built-in variant functions

@@ -15,7 +15,7 @@ import {
   importNameOf,
   type ComponentImport,
 } from "../project/component-imports"
-import { componentsFor } from "../project/components"
+import { componentNameIn, componentsFor } from "../project/components"
 import { NODE_MODULES } from "../project/fs"
 import { definingExportOf, type ExportBinding } from "../project/modules"
 import { isSfc } from "../project/sfc"
@@ -90,6 +90,10 @@ export type TrackerOptions = {
   // Left alone even when the name matches: a raw reka-ui primitive
   // imported next to its shadcn wrapper.
   ignoreImports?: string[]
+  // What a component registration puts in front of every name, as
+  // Nuxt's `components: [{ prefix: "Ui" }]` does: `<UiButton>` is the
+  // project's own `Button`, imported by nobody.
+  componentPrefix?: string
 }
 
 // `<button-cta>` resolves like `<ButtonCta>`: the same import, the way
@@ -169,6 +173,7 @@ export function createComponentTracker(
   const index = componentsFor(filename)
   const patterns = (options.componentImports ?? []).map(regexpOf)
   const ignored = (options.ignoreImports ?? []).map(regexpOf)
+  const prefix = options.componentPrefix
   const imports = new Map<string, ComponentImport>()
   const skipped = new Set<string>()
   const bindings = new Map<string, ExportBinding | null>()
@@ -197,7 +202,13 @@ export function createComponentTracker(
     ) {
       // Another file's template: the AST in hand belongs to the file
       // under lint, so the wrapper is read from disk.
-      target = wrapperTargetOf(binding.file, binding.name, patterns)
+      target = wrapperTargetOf(
+        binding.file,
+        binding.name,
+        patterns,
+        undefined,
+        prefix
+      )
     }
     wrappers.set(root, target)
     return target
@@ -244,11 +255,15 @@ export function createComponentTracker(
         }
         continue
       }
-      // Not imported: a ui component of the project answers to the name.
-      if (index.has(name)) {
+      // Not imported: a ui component of the project answers to the name,
+      // with or without the prefix its registration adds. The name the
+      // index owns is the one reported, so a contract, a variant hint and
+      // the message all speak of `Button`, not `UiButton`.
+      const component = componentNameIn(index, name, prefix)
+      if (component) {
         return {
-          component: name,
-          file: index.files.get(name) ?? null,
+          component,
+          file: index.files.get(component) ?? null,
           wrapper: null,
         }
       }
@@ -1157,6 +1172,7 @@ function keyOf(options: SiteOptions) {
     options.ignoreImports ?? [],
     options.mergeFunctions ?? [],
     options.variantFunctions ?? [],
+    options.componentPrefix ?? null,
     options.scanAllStrings ?? false,
   ])
   optionKeys.set(options, key)

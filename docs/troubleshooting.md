@@ -47,6 +47,21 @@ included in your lint command and that a config override has not disabled
 the rule for it. See [Settings](../README.md#settings) and
 [component discovery](./how-it-works.md#your-components-from-imports).
 
+If your components are auto-imported under a name prefix, so the
+template writes `<UiButton>` with no import, set
+`settings["shadcn-vue"].componentPrefix` to that prefix:
+
+```js
+settings: {
+  "shadcn-vue": {
+    componentPrefix: "Ui",
+  },
+}
+```
+
+Only a name your own UI directory owns answers, so `<UiNotAComponent>`
+stays unchecked either way. See [Recognition](./rules.md#recognition).
+
 ## The linter cannot load the theme
 
 Check the stylesheet path in `components.json`, its imports, and any

@@ -57,6 +57,14 @@ location, set `settings["shadcn-vue"].ui`, such as `"@/ds"`. This recognizes
 for regex matching and `ignoreImports` to skip imports before
 recognition. See [shared options](./rules.md#shared-options).
 
+A framework that registers components under a name prefix, as Nuxt's
+`components: [{ path: "~/components/ui", prefix: "Ui" }]`, writes
+`<UiButton>` and imports nothing. Set
+`settings["shadcn-vue"].componentPrefix` to that prefix: a tag resolves
+when the name behind the prefix is one your UI directory owns, so
+`<UiButton>` is `Button` and `<UiNotAComponent>` is nothing. The
+unprefixed name is what a finding, a contract and a variant hint use.
+
 ## Theme tokens
 
 The theme CSS comes from `components.json`. If the path it names does
