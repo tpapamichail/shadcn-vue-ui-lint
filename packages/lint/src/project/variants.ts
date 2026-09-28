@@ -7,7 +7,7 @@ import * as path from "node:path"
 
 import { child, list, text, walk, type Node } from "./ast"
 import { barrelOf } from "./components"
-import { mtimeOf } from "./fs"
+import { mtimeOf, realpath } from "./fs"
 import { exportsOf } from "./modules"
 import { parseSource } from "./parser"
 import { sfcComponentName, sfcOf } from "./sfc"
@@ -374,7 +374,13 @@ function definitionFor(file: string, component: string) {
     const barrel = /\.vue$/i.test(file) ? barrelOf(path.dirname(file)) : null
     if (!barrel) return null
     const exported = [...exportsOf(barrel).values()]
-    if (!exported.some((binding) => binding.file === file)) return null
+    // A re-export is resolved through the filesystem, so its binding
+    // names the component by its real path. The same file reaches the
+    // linter under a second spelling — a link, a junction, the case on
+    // disk — and one file is still one file.
+    const self = realpath(file)
+    if (!exported.some((binding) => realpath(binding.file) === self))
+      return null
     return variantDefinitionsOf(barrel).find((d) => d.name === expected) ?? null
   }
   return (

@@ -274,4 +274,29 @@ describe("variants from props", () => {
     expect(variantNamesFor(chip, "Chip")).toBeNull()
     expect(variantNamesFor(other, "Other")).toBeNull()
   })
+
+  // One file, two spellings: the barrel's re-export is resolved through
+  // the filesystem and comes back as the real path, while the linter
+  // holds the path it was given. Windows spells a single file many ways
+  // — a junction, a short name, the case on disk — and the barrel has to
+  // answer for every one of them.
+  test("a factory in the barrel answers for a component reached through a link", () => {
+    const root = fs.mkdtempSync(path.join(os.tmpdir(), "shadcn-lint-variants-"))
+    try {
+      const dir = path.join(root, "ui")
+      fs.mkdirSync(dir)
+      const linked = path.join(root, "linked")
+      fs.symlinkSync(dir, linked, "junction")
+      fs.writeFileSync(
+        path.join(dir, "Button.vue"),
+        sfc(`const props = defineProps<{ class?: string }>()`, `<div />`)
+      )
+      fs.writeFileSync(path.join(dir, "index.ts"), buttonBarrel)
+      const button = path.join(linked, "Button.vue")
+      expect(variantNamesFor(button, "Button")).toEqual(["default", "outline"])
+      expect(sizeNamesFor(button, "Button")).toEqual(["default", "sm"])
+    } finally {
+      fs.rmSync(root, { recursive: true, force: true })
+    }
+  })
 })
